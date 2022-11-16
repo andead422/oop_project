@@ -1,7 +1,7 @@
 *
 !*.cpp
 !*.md
-!/*
+!*/
 
 .vscode
 test
