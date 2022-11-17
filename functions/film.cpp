@@ -1,3 +1,9 @@
 #include "../headers/film.hpp"
 
-//parilka
+int FilmViewer::rateFilm(){
+    //parilka
+}
+
+int FilmAdmin::rateFilm(){
+    //parilka
+}
