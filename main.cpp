@@ -1,6 +1,9 @@
 #include <iostream>
+#include "date/date.hpp"
 
 int main()
 {
-    std::cout << "Hello world" << std::endl;
+    Date dt;
+    dt.printDate();
+    cout << endl;
 }

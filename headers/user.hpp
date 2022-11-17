@@ -18,7 +18,7 @@ class Viewer: public User {
 
 public:
     int getAge() { return age; }
-    char getASex() { return sex; }
+    char getSex() { return sex; }
     vector<FilmViewer> getRatedFilms() { return ratedFilms; }
 
     Viewer& setAge(int age) { this->age = age; return *this; }
