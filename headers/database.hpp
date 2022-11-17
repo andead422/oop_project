@@ -1,0 +1,3 @@
+class DBConnect {
+    //parilka
+};
