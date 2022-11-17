@@ -17,7 +17,7 @@ void Administrator::removeFilm(int) {
     
 }
 
-Film Administrator::seeFilmStats(int) {
+FilmAdmin Administrator::seeFilmStats(int) {
 
 }
 

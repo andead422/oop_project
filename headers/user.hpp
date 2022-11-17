@@ -48,7 +48,7 @@ class Administrator: User {
 public:
     bool addFilm(int);
     void removeFilm(int);
-    Film seeFilmStats(int);
+    FilmAdmin seeFilmStats(int);
     Viewer seeViewerStats(int);
 
 private:
