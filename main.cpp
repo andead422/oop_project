@@ -1,4 +1,3 @@
-#include <iostream>
 #include "date/date.hpp"
 
 int main()
