@@ -7,7 +7,7 @@ class User {
 public:
     User(): idUser(userCount++) {}
     //User(int idUser): idUser(idUser) {}
-    User(User& user): idUser(user.idUser) {}
+    User(const User& user): idUser(user.idUser) {}
     ~User() {}
 
     int getIdU() { return idUser; }
@@ -23,7 +23,7 @@ class Viewer: public User {
 public:
     Viewer() {}
     Viewer(int age, char sex, vector<FilmViewer>& ratedFilms): age(age), sex(sex), ratedFilms(ratedFilms) {}
-    Viewer(Viewer& viewer): User(viewer),
+    Viewer(const Viewer& viewer): User(viewer),
                             age(viewer.age), sex(viewer.sex), ratedFilms(viewer.ratedFilms) {}
     ~Viewer() {}
 
