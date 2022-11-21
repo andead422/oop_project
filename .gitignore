@@ -3,6 +3,7 @@
 !*.hpp
 !*.md
 !*/
+!*.sql
 
 .vscode
 test
