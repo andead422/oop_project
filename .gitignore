@@ -4,6 +4,7 @@
 !*.md
 !*/
 !*.sql
+!*.py
 
 .vscode
 test

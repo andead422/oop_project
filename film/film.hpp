@@ -11,7 +11,7 @@ class Film {
 public:
     Film() = default;
     Film(int idFilm) : idFilm(idFilm) {/*arr filmData = getMovieData(idFilm); titleFilm = filmData[0]; genre = filmData[1]; rate = rateFilm(idFilm)*/}
-    Film(int idFilm, string titleFilm, int genre, int rate): idFilm(idFilm), titleFilm(titleFilm), genre(genre), rate(rate) {}
+    Film(int idFilm, string titleFilm, string genre, int rate): idFilm(idFilm), titleFilm(titleFilm), genre(genre), rate(rate) {}
     Film(Film& film) = default;
     ~Film() = default;
 
@@ -37,12 +37,10 @@ class FilmViewer: public Film {
     string imdbId;
 
 public:
-    FilmViewer() {}
-    FilmViewer(int idFilm, string titleFilm, int genre, double userRate, string imdbId): Film(idFilm, titleFilm, genre, userRate),
-                                                                                         imdbId(imdbId) {}
-    FilmViewer(FilmViewer& filmV): Film(filmV),
-                                   imdbId(filmV.imdbId) {}
-    ~FilmViewer() {}
+    FilmViewer() = default;
+    FilmViewer(int idFilm, string titleFilm, string genre, double userRate, string imdbId): Film(idFilm, titleFilm, genre, userRate), imdbId(imdbId) {}
+    FilmViewer(FilmViewer& filmV)  = default;
+    ~FilmViewer() = default;
 
     string getImdbId() { return imdbId; }
 

@@ -22,7 +22,7 @@ class Viewer: public User {
 
 public:
     Viewer() {}
-    Viewer(int age, char sex, vector<FilmViewer> ratedFilms): age(age), sex(sex), ratedFilms(ratedFilms) {}
+    Viewer(int age, char sex, vector<FilmViewer>& ratedFilms): age(age), sex(sex), ratedFilms(ratedFilms) {}
     Viewer(Viewer& viewer): User(viewer),
                             age(viewer.age), sex(viewer.sex), ratedFilms(viewer.ratedFilms) {}
     ~Viewer() {}
@@ -33,7 +33,7 @@ public:
 
     Viewer& setAge(int age) { this->age = age; return *this; }
     Viewer& setSex(char sex) { this->sex = sex; return *this; }
-    Viewer& setRatedFilms(vector<FilmViewer> ratedFilms) { this->ratedFilms = ratedFilms; return *this; }
+    Viewer& setRatedFilms(vector<FilmViewer>& ratedFilms) { this->ratedFilms = ratedFilms; return *this; }
 
     void rateFilm(FilmViewer&);
 
