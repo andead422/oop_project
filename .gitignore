@@ -5,6 +5,6 @@
 !*/
 !*.sql
 !*.py
+!tasks.json
 
-.vscode
 test
