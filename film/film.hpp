@@ -13,6 +13,7 @@ public:
     Film(int idFilm) : idFilm(idFilm) {/*arr filmData = getMovieData(idFilm); titleFilm = filmData[0]; genre = filmData[1]; rate = rateFilm(idFilm)*/}
     Film(int idFilm, string titleFilm, string genre, int rate): idFilm(idFilm), titleFilm(titleFilm), genre(genre), rate(rate) {}
     Film(const Film& film) = default;
+    Film(Film&& film) = default;
     ~Film() = default;
 
     int getIdF() { return idFilm; }
@@ -42,6 +43,7 @@ public:
     FilmViewer() = default;
     FilmViewer(int idFilm, string titleFilm, string genre, double userRate, string imdbId): Film(idFilm, titleFilm, genre, userRate), imdbId(imdbId) {}
     FilmViewer(const FilmViewer& filmV) = default;
+    FilmViewer(FilmViewer&& filmV) = default;
     ~FilmViewer() = default;
 
     string getImdbId() { return imdbId; }

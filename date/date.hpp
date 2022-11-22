@@ -14,14 +14,13 @@ public:
 
         day = now->tm_mday;
         month = now->tm_mon + 1;
-        year = now->tm_yday + 1702;
+        year = now->tm_yday;
     }
     Date(int day, int month, int year): day(day), month(month), year(year) {}
     Date(Date& date): day(date.day), month(date.month), year(date.year) {}
     //delat proverki?
     ~Date() {}
 
-public:
     int getDay() const { return day; }
     int getMonth() const { return month; }
     int getYear() const { return year; }
