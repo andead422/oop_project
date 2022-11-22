@@ -1,3 +1,6 @@
+#ifndef film
+#define film
+
 #include "../includes.hpp"
 
 using std::string;
@@ -12,8 +15,8 @@ public:
     Film() = default;
     Film(int idFilm) : idFilm(idFilm) {/*arr filmData = getMovieData(idFilm); titleFilm = filmData[0]; genre = filmData[1]; rate = rateFilm(idFilm)*/}
     Film(int idFilm, string titleFilm, string genre, int rate): idFilm(idFilm), titleFilm(titleFilm), genre(genre), rate(rate) {}
-    Film(const Film& film) = default;
-    Film(Film&& film) = default;
+    Film(const Film&) = default;
+    Film(Film&&) = default;
     ~Film() = default;
 
     int getIdF() { return idFilm; }
@@ -35,36 +38,4 @@ protected:
     virtual int rateFilm(int idFilm) = 0;
 };
 
-
-class FilmViewer: public Film {
-    string imdbId;
-
-public:
-    FilmViewer() = default;
-    FilmViewer(int idFilm, string titleFilm, string genre, double userRate, string imdbId): Film(idFilm, titleFilm, genre, userRate), imdbId(imdbId) {}
-    FilmViewer(const FilmViewer& filmV) = default;
-    FilmViewer(FilmViewer&& filmV) = default;
-    ~FilmViewer() = default;
-
-    string getImdbId() { return imdbId; }
-
-    FilmViewer& setImdbId(string imdbId) { this->imdbId = imdbId; return *this; }
-
-    FilmViewer& operator =(const FilmViewer& filmViewer);
-    //getFilmImage();
-
-private: 
-    int rateFilm(int idFilm) override;
-};
-
-
-class FilmAdmin: public Film {
-public:
-    FilmAdmin() = default;
-    FilmAdmin(int idFilm, string titleFilm, string genre, double medRate): Film(idFilm, titleFilm, genre, medRate) {}
-    FilmAdmin(const FilmAdmin& filmA) = default;
-    ~FilmAdmin() = default;
-
-private: 
-    int rateFilm(int idFilm) override;
-};
+#endif

@@ -1,4 +1,8 @@
+#ifndef user
+#define user
+
 #include "../film/film.hpp"
+#include "../includes.hpp"
 
 class User {
     int idUser;
@@ -7,48 +11,11 @@ class User {
 public:
     User(): idUser(userCount++) {}
     //User(int idUser): idUser(idUser) {}
-    User(const User& user): idUser(user.idUser) {}
-    ~User() {}
+    User(const User&) = default;
+    ~User() = default;
 
     int getIdU() { return idUser; }
     //User& setIdU(int idUser) { this->idUser = idUser; return *this; }
 };
 
-
-class Viewer: public User {
-    int age;
-    char sex;
-    vector<FilmViewer> ratedFilms;
-
-public:
-    Viewer() {}
-    Viewer(int age, char sex, vector<FilmViewer>& ratedFilms): age(age), sex(sex), ratedFilms(ratedFilms) {}
-    Viewer(const Viewer& viewer): User(viewer),
-                            age(viewer.age), sex(viewer.sex), ratedFilms(viewer.ratedFilms) {}
-    ~Viewer() {}
-
-    int getAge() { return age; }
-    char getSex() { return sex; }
-    vector<FilmViewer> getRatedFilms() { return ratedFilms; }
-
-    Viewer& setAge(int age) { this->age = age; return *this; }
-    Viewer& setSex(char sex) { this->sex = sex; return *this; }
-    Viewer& setRatedFilms(vector<FilmViewer>& ratedFilms) { this->ratedFilms = ratedFilms; return *this; }
-
-    void rateFilm(FilmViewer&);
-
-private:
-    bool checkSeen(FilmViewer&);
-};
-
-
-class Administrator: User {
-public:
-    bool addFilm(int);
-    void removeFilm(int);
-    FilmAdmin seeFilmStats(int);
-    Viewer seeViewerStats(int);
-
-private:
-    bool authorization();
-};
+#endif

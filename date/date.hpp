@@ -1,6 +1,4 @@
-#include <iostream>
-
-using namespace std;
+#include "../includes.hpp"
 
 class Date {
     int day;
@@ -14,12 +12,12 @@ public:
 
         day = now->tm_mday;
         month = now->tm_mon + 1;
-        year = now->tm_yday;
+        year = now->tm_year + 1900;
     }
     Date(int day, int month, int year): day(day), month(month), year(year) {}
-    Date(Date& date): day(date.day), month(date.month), year(date.year) {}
+    Date(Date&) = default;
     //delat proverki?
-    ~Date() {}
+    ~Date() = default;
 
     int getDay() const { return day; }
     int getMonth() const { return month; }

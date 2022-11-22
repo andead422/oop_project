@@ -1,4 +1,6 @@
-//est naitie chto ano dapamoget
+#ifndef includes
+#define includes
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -8,3 +10,5 @@ using std::string;
 using std::cin;
 using std::cout;
 using std::endl;
+
+#endif
