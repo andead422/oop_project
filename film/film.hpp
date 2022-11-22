@@ -29,7 +29,7 @@ public:
     Film& setGenre(string genre) { this->genre = genre; return *this; }
     Film& setTilte(string titleFilm) { this->titleFilm = titleFilm; return *this; }
 
-    Film& operator =(const Film& film);
+    Film& operator =(const Film& filmoperator);
 
 protected:
     // arr getMovieData(int idFilm);
