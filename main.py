@@ -17,7 +17,7 @@ def sql_insert(sql_string):
     conn.commit()
 
 
-with open('C:\\Users\\andyk\\Downloads\\ml-25m\\ml-25m\\movies.csv', 'r', newline='\n', encoding='UTF8') as csvfile:
+with open('ml-25m\\movies.csv', 'r', newline='\n', encoding='UTF8') as csvfile:
     reader = csv.reader(csvfile, delimiter=',')
     next(reader)
     film_info = []

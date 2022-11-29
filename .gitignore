@@ -5,6 +5,8 @@
 !*/
 !*.sql
 !*.py
+!*.csv
+!.txt
 !tasks.json
 
 secret.py
