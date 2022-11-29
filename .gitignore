@@ -1,13 +1,15 @@
 *
+
+!*/
+!*.py
 !*.cpp
 !*.hpp
-!*.md
-!*/
 !*.sql
-!*.py
 !*.csv
 !.txt
+!*.md
 !tasks.json
 
+*.xml
 secret.py
 test
