@@ -7,4 +7,5 @@
 !*.py
 !tasks.json
 
+secret.py
 test
