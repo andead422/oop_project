@@ -3,8 +3,9 @@ import pymysql
 import re
 import secret
 
-# (?:a\.k\.a\.)?.+?;[A-Z]\S+(?:\)|\s\()
+# ((\(a\.k\.a\.)?.+?);[A-Z][^A-Z ]+?(?=\)|\s\()
 
+sss = []
 genres = []
 films = []
 
@@ -22,14 +23,16 @@ with open('ml-25m\\movies.csv', 'r', newline='\n', encoding='UTF8') as csvfile:
     next(reader)
     film_info = []
     counter = 1
-    validator = re.compile(r";[A-Z]\S{1,3}(( \()|(\)))")
+    validator = re.compile(r"(?:(a\.k\.a\.[^()]+?;[ATL][^A-Z ()?!.]{0,2})(?=\))|(.+?;[ATL][^A-Z ()?!.]{0,2})(?= \())")
     for row in reader:
-        film_info.clear()
-        film_info.append(counter)
-        film_info.append(row[0])
-        matches = re.search(validator, row[1])
+        # film_info.clear()
+        # film_info.append(counter)
+        # film_info.append(row[0])
+        # matches = re.search(validator, row[1])
+        # for ii in re.finditer(validator, row[1]):
+        #     print(row[1], ii)
         # re.search()
-        print(row[1], matches)
+
         # for title in row[1].split(' ('):
         #     if ';The' in title:
         #         film_info.append('The ' + row[1].split(';')[0])
