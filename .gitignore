@@ -11,5 +11,7 @@
 !tasks.json
 
 *.xml
+genome-scores.csv
+ratings.csv
 secret.py
 test
