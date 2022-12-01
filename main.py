@@ -5,6 +5,8 @@ import secret
 import copy
 
 # SELECT t1.genre_name FROM genres AS t1 JOIN film_genres AS t2 ON t1.id_genre = t2.id_genre WHERE t2.id_film = 1; выдать жанры по фильму
+# LOAD DATA INFILE '/c/Users/andyk/Documents/vs_code/oop_project/ml-25m/ratings.csv' INTO TABLE rating FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES (id_user, @id_film_source, rating, @timestamp) SET id_film = (SEL
+# ECT id_film FROM film WHERE id_film_source = @id_film_source);
 
 genres = []
 films = []
