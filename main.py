@@ -5,7 +5,8 @@ import secret
 import copy
 
 # SELECT t1.genre_name FROM genres AS t1 JOIN film_genres AS t2 ON t1.id_genre = t2.id_genre WHERE t2.id_film = 1; выдать жанры по фильму
-# LOAD DATA LOCAL INFILE "{path}" INTO TABLE rating FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES (id_user, @id_film_source, rating, @timestamp) SET id_film = (SELECT id_film FROM film WHERE id_film_source = @id_film_source);
+# LOAD DATA LOCAL INFILE "{path}" INTO TABLE rating FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES (id_user, id_film, rating, @timestamp);
+# UPDATE rating t1 SET t1.id_film = (SELECT t2.id_film FROM film t2 WHERE t2.id_film_source = t1.id_film_source);
 # загрузить файл с рейтингом в бд
 
 genres = []
@@ -75,9 +76,12 @@ def add_films():
                     if genre not in genres:
                         genres.append(genre)
                 counter += 1
+    print('All films added to db ' + secret.getdb())
 
     genres_str = '("' + '"), ("'.join(sorted(genres)) + '")'
     sql_insert(f"INSERT INTO genres (genre_name) VALUES {genres_str}")
+
+    print('All genres added to db ' + secret.getdb())
 
     id_genres = sql_select_all('SELECT * FROM genres')
     id_genres = dict((y, x) for x, y in id_genres)
@@ -86,6 +90,8 @@ def add_films():
         for gg in fg[1]:
             fg_str = '(' + str(fg[0]) + ', ' + str(id_genres[gg]) + ')'
             sql_insert(f"INSERT INTO film_genres (id_film, id_genre) VALUES {fg_str}")
+    
+    print('All films connected to genres in db ' + secret.getdb())
 
 
 def add_rating():
@@ -116,10 +122,10 @@ def add_rating():
 
 add_films()
 
-films = dict((y, x) for x, y, a, b in films)
-print(films)
+# films = dict((y, x) for x, y, a, b in films)
+# print(films)
 
-add_rating()
+# add_rating()
 
 conn.commit()
 cur.close()
