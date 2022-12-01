@@ -83,7 +83,6 @@ def add_films():
     for fg in films_genres:
         for gg in fg[1]:
             fg_str = '(' + str(fg[0]) + ', ' + str(id_genres[gg]) + ')'
-            print(fg_str)
             sql_insert(f"INSERT INTO film_genres (id_film, id_genre) VALUES {fg_str}")
 
 
@@ -94,13 +93,13 @@ def add_rating():
         next(reader)
         counter = 1
         for row_rating in reader:
+            print(counter, films[int(row_rating[1])], row_rating[2])
+            sql_insert(f"INSERT INTO rating (id_user, id_film, rating) VALUES ({counter}, {films[int(row_rating[1])]}, {row_rating[2]})")
             if row_rating[0] not in users:
                 print(counter, row_rating[0])
                 users.append([counter, row_rating[0]])
                 sql_insert(f"INSERT INTO users VALUES ({counter}, {int(row_rating[0])})")
                 counter += 1
-            users_dict = dict((y, x) for x, y in users)
-            sql_insert(f"INSERT INTO rating (id_user, id_film, rating) VALUES ({users_dict[row_rating[0]]}, {films[row_rating[1]]}, {row_rating[2]})")
 
 
 # def add_tag():
