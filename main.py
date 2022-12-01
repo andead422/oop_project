@@ -92,12 +92,14 @@ def add_rating():
         reader = csv.reader(rating, delimiter=',')
         next(reader)
         counter = 1
+        f_keys = films.keys()
         for row_rating in reader:
-            print(counter, films[int(row_rating[1])], row_rating[2])
-            sql_insert(f"INSERT INTO rating (id_user, id_film, rating) VALUES ({counter}, {films[int(row_rating[1])]}, {row_rating[2]})")
+            if int(row_rating[1]) in f_keys:
+                print(counter, films[int(row_rating[1])], row_rating[2])
+                sql_insert(f"INSERT INTO rating (id_user, id_film, rating) VALUES ({counter}, {films[int(row_rating[1])]}, {row_rating[2]})")
             if row_rating[0] not in users:
                 print(counter, row_rating[0])
-                users.append([counter, row_rating[0]])
+                users.append(row_rating[0])
                 sql_insert(f"INSERT INTO users VALUES ({counter}, {int(row_rating[0])})")
                 counter += 1
 
