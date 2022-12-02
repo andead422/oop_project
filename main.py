@@ -3,16 +3,20 @@ import pymysql
 import re
 import secret
 import copy
+from tempfile import NamedTemporaryFile
+import shutil
+from fuzzywuzzy import fuzz
 
-# SELECT t1.genre_name FROM genres AS t1 JOIN film_genres AS t2 ON t1.id_genre = t2.id_genre WHERE t2.id_film = 1; выдать жанры по фильму
+# запустить эту команду до запуска кода
 # LOAD DATA LOCAL INFILE "{path}" INTO TABLE rating FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES (id_user, id_film, rating, @timestamp);
-# UPDATE rating t1 SET t1.id_film = (SELECT t2.id_film FROM film t2 WHERE t2.id_film_source = t1.id_film_source);
 # загрузить файл с рейтингом в бд
 
+
+tempfile = NamedTemporaryFile(mode='w', delete=False)
 genres = []
 films = []
 films_genres = []
-users = []
+
 
 conn = pymysql.connect(user=secret.getuser(), password=secret.getpass(), database=secret.getdb())
 cur = conn.cursor()
@@ -76,6 +80,8 @@ def add_films():
                     if genre not in genres:
                         genres.append(genre)
                 counter += 1
+    sql_insert("CREATE UNIQUE INDEX index_id_film_source ON film(id_film_source)")
+
     print('All films added to db ' + secret.getdb())
 
     genres_str = '("' + '"), ("'.join(sorted(genres)) + '")'
@@ -90,42 +96,44 @@ def add_films():
         for gg in fg[1]:
             fg_str = '(' + str(fg[0]) + ', ' + str(id_genres[gg]) + ')'
             sql_insert(f"INSERT INTO film_genres (id_film, id_genre) VALUES {fg_str}")
-    
+
+    sql_insert("CREATE INDEX index_id_film_fg ON film_genres(id_film)")
+
     print('All films connected to genres in db ' + secret.getdb())
 
 
 def add_rating():
-    global films
-    with open('ml-25m/ratings.csv', 'r', newline='\n', encoding='UTF8') as rating:
-        reader = csv.reader(rating, delimiter=',')
+    sql_insert("UPDATE rating t1 SET t1.id_film = (SELECT t2.id_film FROM film t2 WHERE t2.id_film_source = t1.id_film_source)")
+
+    print('All films connected to rating in db ' + secret.getdb())
+
+    sql_insert("ALTER TABLE rating DROP COLUMN id_film_source")
+    sql_insert("ALTER TABLE rating MODIFY COLUMN id_film int NOT NULL;")
+
+    sql_insert("CREATE INDEX index_id_film_r ON rating(id_film)")
+
+
+def sort_tag():
+    with open('ml-25m/tags_first_ver.csv', 'r', newline='\n', encoding='UTF8') as tags, tempfile:
+        space_searcher = re.compile(r"")
+
+        fields_original = ['userId', 'movieId', 'tag', 'timestamp']
+        fields_modified = ['userId', 'movieId', 'tag']
+
+        reader = csv.DictReader(tags, fieldnames=fields_original)
+        writer = csv.DictWriter(tempfile, fieldnames=fields_modified)
+
         next(reader)
-        counter = 1
-        f_keys = films.keys()
-        for row_rating in reader:
-            if int(row_rating[1]) in f_keys:
-                print(counter, films[int(row_rating[1])], row_rating[2])
-                sql_insert(f"INSERT INTO rating (id_user, id_film, rating) VALUES ({counter}, {films[int(row_rating[1])]}, {row_rating[2]})")
-            if row_rating[0] not in users:
-                print(counter, row_rating[0])
-                users.append(row_rating[0])
-                sql_insert(f"INSERT INTO users VALUES ({counter}, {int(row_rating[0])})")
-                counter += 1
+        writer.writerow('userId,movieId,tag')
 
-
-# def add_tag():
-#     with open('ml-25m/tags.csv', 'r', newline='\n', encoding='UTF8') as tags:
-#         reader = csv.reader(tags, delimiter=',')
-#         next(reader)
-#         for row_tag in reader:
+        # for row in reader:
 
 
 
-add_films()
 
-# films = dict((y, x) for x, y, a, b in films)
-# print(films)
-
+# add_films()
 # add_rating()
+sort_tag()
 
 conn.commit()
 cur.close()
