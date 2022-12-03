@@ -17,10 +17,10 @@ def delete_people():
         writer = csv.writer(temp_file, delimiter=',')
         writer.writerow('userId,movieId,tag')
         next(reader)
-        search = tmdb.Search()
         for row_tags in reader:
             if row_tags[2].lower() not in people:
                 if len(row_tags[2].split(' ')) >= 2:
+                    search = tmdb.Search()
                     for res in search.person(query=row_tags[2])['results']:
                         if fuzz.token_sort_ratio(res['name'], row_tags[2]) == 100:
                             print('person: ' + row_tags[2] + ', ' + res['name'])
