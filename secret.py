@@ -8,3 +8,7 @@ def getpass():
 
 def getdb():
     return 'interm_db'
+
+
+def getapikey():
+    return '04f2ff31720eddfbaccbd4740002d585'

@@ -16,7 +16,6 @@ films = []
 films_genres = []
 tags_film = {}
 
-
 conn = pymysql.connect(user=secret.getuser(), password=secret.getpass(), database=secret.getdb())
 cur = conn.cursor()
 
@@ -57,7 +56,8 @@ def add_films():
 
                 article_found = re.findall(article_checker, row_film[1])
                 if article_found:
-                    film_info.append(article_found[0].split(';')[-1] + ' ' + ', '.join(article_found[0].split(';')[:-1]))
+                    film_info.append(
+                        article_found[0].split(';')[-1] + ' ' + ', '.join(article_found[0].split(';')[:-1]))
                 else:
                     film_info.append(', '.join(row_film[1].split(' (')[0].split(';')))
 
@@ -72,7 +72,8 @@ def add_films():
                 films.append(copy.deepcopy(film_info))
                 films_genres.append(copy.deepcopy(film_genres))
 
-                film_str = '(' + str(film_info[0]) + ', ' + str(film_info[1]) + ', "' + str(film_info[2]) + '", ' + str(film_info[3]) + ')'
+                film_str = '(' + str(film_info[0]) + ', ' + str(film_info[1]) + ', "' + str(film_info[2]) + '", ' + str(
+                    film_info[3]) + ')'
                 sql_insert(f"INSERT INTO film (id_film, id_film_source, title, year) VALUES {film_str}")
 
                 for genre in row_film[-1].split('|'):
@@ -102,7 +103,8 @@ def add_films():
 
 
 def add_rating():
-    sql_insert("UPDATE rating t1 SET t1.id_film = (SELECT t2.id_film FROM film t2 WHERE t2.id_film_source = t1.id_film_source)")
+    sql_insert(
+        "UPDATE rating t1 SET t1.id_film = (SELECT t2.id_film FROM film t2 WHERE t2.id_film_source = t1.id_film_source)")
 
     print('All films connected to rating in db ' + secret.getdb())
 
@@ -119,10 +121,11 @@ def sort_tag():
 
         reader = csv.DictReader(tags_file, fieldnames=fields_original)
         next(reader)
-
         for row_tags in reader:
             for word in row_tags['tag'].split(' '):
                 print('word: ' + word)
+                if len(word) < 4:
+                    continue
                 try:
                     for tag in tags_film[row_tags['movieId']].keys():
                         print('tag: ' + tag)
@@ -141,20 +144,25 @@ def sort_tag():
 
 # add_films()
 # add_rating()
-sort_tag()
-print(tags_film)
+# sort_tag()
+# print(tags_film)
 
 # str_1 = 'historical'
 # str_2 = 'hisory'
+# str_1 = 'hindi'
+# str_2 = 'india'
+str_1 = 'funny'
+str_2 = 'notfunny'
 
-# print(fuzz.ratio(str_1, str_2))
-# print(fuzz.token_sort_ratio(str_1, str_2))
-# print(fuzz.token_set_ratio(str_1, str_2))
-# print(fuzz.partial_ratio(str_1, str_2))
-# print(fuzz.WRatio(str_1, str_2))
-# print(fuzz.UQRatio(str_1, str_2))
-# print(fuzz.UWRatio(str_1, str_2))
-# print(fuzz.QRatio(str_1, str_2))
+
+print(fuzz.ratio(str_1, str_2))
+print(fuzz.token_sort_ratio(str_1, str_2))
+print(fuzz.token_set_ratio(str_1, str_2))
+print(fuzz.partial_ratio(str_1, str_2))
+print(fuzz.WRatio(str_1, str_2))
+print(fuzz.UQRatio(str_1, str_2))
+print(fuzz.UWRatio(str_1, str_2))
+print(fuzz.QRatio(str_1, str_2))
 
 
 conn.commit()
