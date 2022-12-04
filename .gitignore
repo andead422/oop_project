@@ -7,7 +7,7 @@
 !*.hpp
 !*.sql
 !*.csv
-!.txt
+!*.txt
 !*.md
 !tasks.json
 
