@@ -19,10 +19,13 @@ films = []
 films_genres = []
 tags_film = {}
 actors = set()
-film_actors = {}
 directors = set()
+actors_actual = set()
+directors_actual = set()
+film_actors = {}
 film_directors = {}
 errors_list = []
+no_data_list = []
 
 conn = pymysql.connect(user=secret.getuser(), password=secret.getpass(), database=secret.getdb())
 cur = conn.cursor()
@@ -52,7 +55,8 @@ def cast_getter(tmdb_id):
             return film_tmdb.credits()
         except:
             print('reconnecting...')
-            time.sleep(2)
+            # print(err)
+            time.sleep(0.5)
             flag -= 1
     return 'NULL'
 
@@ -169,55 +173,74 @@ def add_rating():
 #     for row_tag in tag_list:
 
 
-def add_cast():
+def add_cast(partitions_quan=1):
     global actors
     global film_actors
     global directors
     global film_directors
     global errors_list
     links = sql_select_all("SELECT id_film, id_tmdb FROM links")
-    for film in links:
-        result = cast_getter(film[1])
-        if result != 'NULL' and result['cast'] != [] and result['crew'] != []:
-            counter = 0
-            film_actors[film[0]] = []
-            for cast in result['cast']:
-                if counter < 5:
-                    if cast['original_name'] not in actors:
-                        actors.add(cast['original_name'])
-                    film_actors[film[0]].append(cast['original_name'])
-                    counter += 1
-            for crew in result['crew']:
-                if crew['job'] == 'Director':
-                    if crew['original_name'] not in directors:
-                        directors.add(crew['original_name'])
-                    film_directors[film[0]] = crew['original_name']
-                    break
-            try:
-                print('actors for ' + str(film[0]) + ': ' + str(film_actors[film[0]]))
-                print('directors for ' + str(film[0]) + ': ' + str(film_directors[film[0]]))
-            except:
-                pass
-        else:
-            errors_list.append(film)
-    sql_insert(f"INSERT INTO actors (full_name) VALUES {str(sorted(actors)).replace('{', '(').replace('}', ')')}")
-    sql_insert(f"INSERT INTO actors (full_name) VALUES {str(sorted(directors)).replace('{', '(').replace('}', ')')}")
-    actors_ids = sql_select_all("SELECT * FROM actors")
-    directors_ids = sql_select_all("SELECT * FROM directors")
-    print('All actors and directors added to db ' + secret.getdb())
-    actors_ids = dict((y, x) for x, y in dict(actors_ids))
-    directors_ids = dict((y, x) for x, y in dict(directors_ids))
-    for film_ids in film_actors.keys():
-        for film_cast in film_actors[film_ids]:
-            sql_insert(f"INSERT INTO film_act (id_film, id_actor) VALUES ({film_ids}, {actors_ids[film_cast]})")
-        if directors_ids[film_ids]:
-            sql_insert(f"INSERT INTO film_dir (id_film, id_dir) VALUES ({film_ids}, {directors_ids[film_ids]})")
+    quan_films = len(links)
+    part_no = 1
+    cur_film_id = 0
+    while part_no <= partitions_quan:
+        while quan_films*((part_no-1)/partitions_quan) <= cur_film_id <= quan_films*(part_no/partitions_quan):
+            film = links[cur_film_id]
+            result = cast_getter(film[1])
+            if result != 'NULL':
+                if result['cast'] != [] and result['crew'] != []:
+                    counter = 0
+                    film_actors[film[0]] = []
+                    for cast in result['cast']:
+                        if counter < 5:
+                            if cast['original_name'] not in actors or cast['original_name'] not in actors_actual:
+                                actors_actual.add(cast['original_name'])
+                            film_actors[film[0]].append(cast['original_name'])
+                            counter += 1
+                    for crew in result['crew']:
+                        if crew['job'] == 'Director':
+                            if crew['original_name'] not in directors or cast['original_name'] not in directors_actual:
+                                directors_actual.add(crew['original_name'])
+                            film_directors[film[0]] = crew['original_name']
+                            break
+                    try:
+                        print('actors for ' + str(film[0]) + ': ' + str(film_actors[film[0]]))
+                        print('directors for ' + str(film[0]) + ': ' + str(film_directors[film[0]]))
+                    except:
+                        pass
+                    else:
+                        no_data_list.append(film)
+            else:
+                errors_list.append(film)
+            cur_film_id += 1
+        sql_insert(f"INSERT INTO actors (full_name) VALUES {str(sorted(actors_actual)).replace('{', '(').replace('}', ')')}")
+        sql_insert(f"INSERT INTO directors (full_name) VALUES {str(sorted(directors_actual)).replace('{', '(').replace('}', ')')}")
+        actors = actors_actual.copy()
+        directors = directors_actual.copy()
+        actors_actual.clear()
+        directors_actual.clear()
+        print('All actors and directors added to db ' + secret.getdb())
+        actors_ids = sql_select_all("SELECT * FROM actors")
+        directors_ids = sql_select_all("SELECT * FROM directors")
+        actors_ids = dict((y, x) for x, y in dict(actors_ids))
+        directors_ids = dict((y, x) for x, y in dict(directors_ids))
+        for film_ids in film_actors.keys():
+            for film_cast in film_actors[film_ids]:
+                sql_insert(f"INSERT INTO film_act (id_film, id_actor) VALUES ({film_ids}, {actors_ids[film_cast]})")
+            if directors_ids[film_ids]:
+                sql_insert(f"INSERT INTO film_dir (id_film, id_dir) VALUES ({film_ids}, {directors_ids[film_directors[film_ids]]})")
+        film_actors.clear()
+        film_directors.clear()
+        print('iteration no. ' + str(part_no) + ' ended')
+        part_no += 1
 
 
 # add_films()
 # add_rating()
 # sort_tag()
-add_cast()
+add_cast(4)
+print(no_data_list)
+print(errors_list)
 # print(tags_film)
 
 # str_1 = 'historical'
