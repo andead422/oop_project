@@ -213,8 +213,10 @@ def add_cast(partitions_quan=1):
             else:
                 errors_list.append(film)
             cur_film_id += 1
-        sql_insert(f"INSERT INTO actors (full_name) VALUES {str(sorted(actors_actual)).replace('{', '(').replace('}', ')')}")
-        sql_insert(f"INSERT INTO directors (full_name) VALUES {str(sorted(directors_actual)).replace('{', '(').replace('}', ')')}")
+        actors_str = '("' + '"), ("'.join(sorted(actors_actual)) + '")'
+        directors_str = '("' + '"), ("'.join(sorted(directors_actual)) + '")'
+        sql_insert(f"INSERT INTO actors (full_name) VALUES {actors_str}")
+        sql_insert(f"INSERT INTO directors (full_name) VALUES {directors_str}")
         actors = actors_actual.copy()
         directors = directors_actual.copy()
         actors_actual.clear()
