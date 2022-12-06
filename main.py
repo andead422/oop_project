@@ -22,6 +22,7 @@ actors = set()
 film_actors = {}
 directors = set()
 film_directors = {}
+errors_list = []
 
 conn = pymysql.connect(user=secret.getuser(), password=secret.getpass(), database=secret.getdb())
 cur = conn.cursor()
@@ -173,10 +174,11 @@ def add_cast():
     global film_actors
     global directors
     global film_directors
+    global errors_list
     links = sql_select_all("SELECT id_film, id_tmdb FROM links")
     for film in links:
         result = cast_getter(film[1])
-        if result != 'NULL':
+        if result != 'NULL' and result['cast'] != [] and result['crew'] != []:
             counter = 0
             film_actors[film[0]] = []
             for cast in result['cast']:
@@ -191,7 +193,13 @@ def add_cast():
                         directors.add(crew['original_name'])
                     film_directors[film[0]] = crew['original_name']
                     break
-            # print(film_actors[film[0]])
+            try:
+                print('actors for ' + str(film[0]) + ': ' + str(film_actors[film[0]]))
+                print('directors for ' + str(film[0]) + ': ' + str(film_directors[film[0]]))
+            except:
+                pass
+        else:
+            errors_list.append(film)
     sql_insert(f"INSERT INTO actors (full_name) VALUES {str(sorted(actors)).replace('{', '(').replace('}', ')')}")
     sql_insert(f"INSERT INTO actors (full_name) VALUES {str(sorted(directors)).replace('{', '(').replace('}', ')')}")
     actors_ids = sql_select_all("SELECT * FROM actors")
@@ -202,7 +210,8 @@ def add_cast():
     for film_ids in film_actors.keys():
         for film_cast in film_actors[film_ids]:
             sql_insert(f"INSERT INTO film_act (id_film, id_actor) VALUES ({film_ids}, {actors_ids[film_cast]})")
-        sql_insert(f"INSERT INTO film_dir (id_film, id_dir) VALUES ({film_ids}, {directors_ids[film_ids]})")
+        if directors_ids[film_ids]:
+            sql_insert(f"INSERT INTO film_dir (id_film, id_dir) VALUES ({film_ids}, {directors_ids[film_ids]})")
 
 
 # add_films()
