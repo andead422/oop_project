@@ -193,15 +193,17 @@ def add_cast(partitions_quan=1):
                     film_actors[film[0]] = []
                     for cast in result['cast']:
                         if counter < 5:
-                            if cast['original_name'] not in actors or cast['original_name'] not in actors_actual:
-                                actors_actual.add(cast['original_name'])
-                            film_actors[film[0]].append(cast['original_name'])
+                            if cast['original_name'].replace('"', '\\"') not in actors and cast['original_name'].replace('"', '\\"') not in actors_actual:
+                                actors_actual.add(cast['original_name'].replace('"', '\\"'))
+                                actors.add(cast['original_name'].replace('"', '\\"'))
+                            film_actors[film[0]].append(cast['original_name'].replace('"', '\\"'))
                             counter += 1
                     for crew in result['crew']:
                         if crew['job'] == 'Director':
-                            if crew['original_name'] not in directors or cast['original_name'] not in directors_actual:
-                                directors_actual.add(crew['original_name'])
-                            film_directors[film[0]] = crew['original_name']
+                            if crew['original_name'].replace('"', '\\"') not in directors and cast['original_name'].replace('"', '\\"') not in directors_actual:
+                                directors_actual.add(crew['original_name'].replace('"', '\\"'))
+                                directors.add(crew['original_name'].replace('"', '\\"'))
+                            film_directors[film[0]] = crew['original_name'].replace('"', '\\"')
                             break
                     try:
                         print('actors for ' + str(film[0]) + ': ' + str(film_actors[film[0]]))
@@ -214,33 +216,33 @@ def add_cast(partitions_quan=1):
                 errors_list.append(film)
             cur_film_id += 1
         actors_str = '("' + '"), ("'.join(sorted(actors_actual)) + '")'
-        directors_str = '("' + '"), ("'.join(sorted(directors_actual)) + '")'
+        directors_str = '("' + '"), ("'.join(sorted(directors_actual)).replace('"', '\\"') + '")'
         sql_insert(f"INSERT INTO actors (full_name) VALUES {actors_str}")
         sql_insert(f"INSERT INTO directors (full_name) VALUES {directors_str}")
-        actors = actors_actual.copy()
-        directors = directors_actual.copy()
         actors_actual.clear()
         directors_actual.clear()
         print('All actors and directors added to db ' + secret.getdb())
         actors_ids = sql_select_all("SELECT * FROM actors")
         directors_ids = sql_select_all("SELECT * FROM directors")
-        actors_ids = dict((y, x) for x, y in dict(actors_ids))
-        directors_ids = dict((y, x) for x, y in dict(directors_ids))
+        actors_ids = {y: x for x, y in dict(actors_ids).items()}
+        directors_ids = {y: x for x, y in dict(directors_ids).items()}
         for film_ids in film_actors.keys():
             for film_cast in film_actors[film_ids]:
-                sql_insert(f"INSERT INTO film_act (id_film, id_actor) VALUES ({film_ids}, {actors_ids[film_cast]})")
-            if directors_ids[film_ids]:
+                sql_insert(f"INSERT INTO film_act (id_film, id_act) VALUES ({film_ids}, {actors_ids[film_cast]})")
+            if directors_ids[film_directors[film_ids]]:
                 sql_insert(f"INSERT INTO film_dir (id_film, id_dir) VALUES ({film_ids}, {directors_ids[film_directors[film_ids]]})")
         film_actors.clear()
         film_directors.clear()
         print('iteration no. ' + str(part_no) + ' ended')
+        print(no_data_list)
+        print(errors_list)
         part_no += 1
 
 
 # add_films()
 # add_rating()
 # sort_tag()
-add_cast(4)
+add_cast(5)
 print(no_data_list)
 print(errors_list)
 # print(tags_film)
