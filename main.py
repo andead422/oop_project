@@ -191,32 +191,35 @@ def add_cast(partitions_quan=1):
                 if result['cast'] != [] and result['crew'] != []:
                     counter = 0
                     film_actors[film[0]] = []
+                    film_directors[film[0]] = []
                     for cast in result['cast']:
                         if counter < 5:
-                            if cast['original_name'].replace('"', '\\"') not in actors and cast['original_name'].replace('"', '\\"') not in actors_actual:
+                            if not (cast['original_name'].replace('"', '\\"') in actors or cast['original_name'].replace('"', '\\"') in actors_actual):
                                 actors_actual.add(cast['original_name'].replace('"', '\\"'))
                                 actors.add(cast['original_name'].replace('"', '\\"'))
                             film_actors[film[0]].append(cast['original_name'].replace('"', '\\"'))
                             counter += 1
                     for crew in result['crew']:
                         if crew['job'] == 'Director':
-                            if crew['original_name'].replace('"', '\\"') not in directors and cast['original_name'].replace('"', '\\"') not in directors_actual:
+                            if not (crew['original_name'].replace('"', '\\"') in directors or cast['original_name'].replace('"', '\\"') in directors_actual):
                                 directors_actual.add(crew['original_name'].replace('"', '\\"'))
                                 directors.add(crew['original_name'].replace('"', '\\"'))
-                            film_directors[film[0]] = crew['original_name'].replace('"', '\\"')
+                            film_directors[film[0]].append(crew['original_name'].replace('"', '\\"'))
                             break
                     try:
                         print('actors for ' + str(film[0]) + ': ' + str(film_actors[film[0]]))
                         print('directors for ' + str(film[0]) + ': ' + str(film_directors[film[0]]))
                     except:
                         pass
-                    else:
-                        no_data_list.append(film)
+                else:
+                    no_data_list.append(film)
             else:
                 errors_list.append(film)
             cur_film_id += 1
         actors_str = '("' + '"), ("'.join(sorted(actors_actual)) + '")'
-        directors_str = '("' + '"), ("'.join(sorted(directors_actual)).replace('"', '\\"') + '")'
+        directors_str = '("' + '"), ("'.join(sorted(directors_actual)) + '")'
+        print(actors_str)
+        print(directors_str)
         sql_insert(f"INSERT INTO actors (full_name) VALUES {actors_str}")
         sql_insert(f"INSERT INTO directors (full_name) VALUES {directors_str}")
         actors_actual.clear()
@@ -229,8 +232,9 @@ def add_cast(partitions_quan=1):
         for film_ids in film_actors.keys():
             for film_cast in film_actors[film_ids]:
                 sql_insert(f"INSERT INTO film_act (id_film, id_act) VALUES ({film_ids}, {actors_ids[film_cast]})")
-            if directors_ids[film_directors[film_ids]]:
-                sql_insert(f"INSERT INTO film_dir (id_film, id_dir) VALUES ({film_ids}, {directors_ids[film_directors[film_ids]]})")
+        for film_ids in film_directors.keys():
+            for film_crew in film_directors[film_ids]:
+                sql_insert(f"INSERT INTO film_dir (id_film, id_dir) VALUES ({film_ids}, {directors_ids[film_crew]})")
         film_actors.clear()
         film_directors.clear()
         print('iteration no. ' + str(part_no) + ' ended')
