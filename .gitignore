@@ -14,5 +14,7 @@
 *.xml
 genome-scores.csv
 ratings.csv
+oop_project.sql
 secret.py
 test
+test.*

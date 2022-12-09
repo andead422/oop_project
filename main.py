@@ -13,11 +13,11 @@ from fuzzywuzzy import fuzz
 
 # SELECT DISTINCT tag, count(tag) FROM tag_tmp GROUP BY tag ORDER BY count(tag) DESC;
 
+start_time = time.time()
 
 genres = []
 films = []
 films_genres = []
-tags_film = {}
 actors = set()
 directors = set()
 actors_actual = set()
@@ -140,37 +140,46 @@ def add_rating():
     sql_insert("CREATE INDEX index_id_film_r ON rating(id_film)")
 
 
-# def sort_tag():
-#     global tags_film
-#     with open('ml-25m/tags_first_ver.csv', 'r', newline='\n', encoding='UTF8') as tags_file:
-#         fields_original = ['userId', 'movieId', 'tag']
-#
-#         reader = csv.DictReader(tags_file, fieldnames=fields_original)
-#         next(reader)
-#         for row_tags in reader:
-#             for word in row_tags['tag'].split(' '):
-#                 print('word: ' + word)
-#                 if len(word) < 4:
-#                     continue
-#                 try:
-#                     for tag in tags_film[row_tags['movieId']].keys():
-#                         print('tag: ' + tag)
-#                         if fuzz.WRatio(word, tag) >= 70:
-#                             print(tag + ' + 1')
-#                             tags_film[row_tags['movieId']][tag] += 1
-#                             break
-#                     else:
-#                         print(word + ' = 1')
-#                         tags_film[row_tags['movieId']][word] = 1
-#                 except:
-#                     tags_film[row_tags['movieId']] = {}
-#                     print(word + ' = 1 (except)')
-#                     tags_film[row_tags['movieId']][word] = 1
-
-
-# def sort_tag():
-#     tag_list = sql_select_all("SELECT DISTINCT * FROM tag_tmp;")
-#     for row_tag in tag_list:
+def sort_tag():
+    word_tags = {}
+    all_tags = sql_select_all("SELECT * FROM tag_tmp")
+    negation_tog_start = re.compile(r"^(?:in|un|im|il|ir|de|mis|a|non)(?=\w+)")
+    negation_tog_end = re.compile(r"\w+less")
+    negation_sep = re.compile(r"(?:not|aint|amnt|isnt|arent|havent|hasnt|hadnt|dont|didnt|wont)")
+    neg_str = 'NEEEEEEEEEEEEEG'
+    for tag_info in all_tags:
+        word_list = tag_info[2].split(' ')
+        for ii in range(len(word_list)):
+            if len(word_list[ii]) >= 4:
+                print('before corr: ' + word_list[ii])
+                if re.search(negation_sep, word_list[ii]):
+                    for jj in range(len(word_list[ii + 1:])):
+                        if len(word_list[ii + 1 + jj]) >= 4:
+                            word_list[ii + 1 + jj] = neg_str + word_list[ii + 1 + jj]
+                            break
+                    continue
+                elif re.search(negation_tog_end, word_list[ii]):
+                    word_list[ii] = neg_str + word_list[ii][:-4]
+                else:
+                    re.sub(negation_tog_start, neg_str, word_list[ii])
+                print('after corr: ' + word_list[ii])
+                for tag_sorted in list(word_tags.keys()):
+                    match = fuzz.token_sort_ratio(word_list[ii], tag_sorted)
+                    if match > 80:
+                        print('match with ' + str(match) + '%: ' + word_list[ii] + ', ' + tag_sorted)
+                        if tag_info[1] in list(word_tags[tag_sorted].keys()):
+                            word_tags[tag_sorted][tag_info[1]].add(tag_info[0])
+                        else:
+                            word_tags[tag_sorted] = {tag_info[1]: {tag_info[0]}}
+                        break
+                else:
+                    print('no match for ' + word_list[ii])
+                    word_tags[word_list[ii]] = {tag_info[1]: {tag_info[0]}}
+    print(word_tags)
+    for tag in list(word_tags.keys()):
+        if len(word_tags[tag]) < 3:
+            word_tags.pop(tag)
+    print(word_tags)
 
 
 def add_cast(partitions_quan=1):
@@ -191,32 +200,35 @@ def add_cast(partitions_quan=1):
                 if result['cast'] != [] and result['crew'] != []:
                     counter = 0
                     film_actors[film[0]] = []
+                    film_directors[film[0]] = []
                     for cast in result['cast']:
                         if counter < 5:
-                            if cast['original_name'].replace('"', '\\"') not in actors and cast['original_name'].replace('"', '\\"') not in actors_actual:
+                            if not (cast['original_name'].replace('"', '\\"') in actors or cast['original_name'].replace('"', '\\"') in actors_actual):
                                 actors_actual.add(cast['original_name'].replace('"', '\\"'))
                                 actors.add(cast['original_name'].replace('"', '\\"'))
                             film_actors[film[0]].append(cast['original_name'].replace('"', '\\"'))
                             counter += 1
                     for crew in result['crew']:
                         if crew['job'] == 'Director':
-                            if crew['original_name'].replace('"', '\\"') not in directors and cast['original_name'].replace('"', '\\"') not in directors_actual:
+                            if not (crew['original_name'].replace('"', '\\"') in directors or cast['original_name'].replace('"', '\\"') in directors_actual):
                                 directors_actual.add(crew['original_name'].replace('"', '\\"'))
                                 directors.add(crew['original_name'].replace('"', '\\"'))
-                            film_directors[film[0]] = crew['original_name'].replace('"', '\\"')
+                            film_directors[film[0]].append(crew['original_name'].replace('"', '\\"'))
                             break
                     try:
                         print('actors for ' + str(film[0]) + ': ' + str(film_actors[film[0]]))
                         print('directors for ' + str(film[0]) + ': ' + str(film_directors[film[0]]))
                     except:
                         pass
-                    else:
-                        no_data_list.append(film)
+                else:
+                    no_data_list.append(film)
             else:
                 errors_list.append(film)
             cur_film_id += 1
         actors_str = '("' + '"), ("'.join(sorted(actors_actual)) + '")'
-        directors_str = '("' + '"), ("'.join(sorted(directors_actual)).replace('"', '\\"') + '")'
+        directors_str = '("' + '"), ("'.join(sorted(directors_actual)) + '")'
+        print(actors_str)
+        print(directors_str)
         sql_insert(f"INSERT INTO actors (full_name) VALUES {actors_str}")
         sql_insert(f"INSERT INTO directors (full_name) VALUES {directors_str}")
         actors_actual.clear()
@@ -229,8 +241,9 @@ def add_cast(partitions_quan=1):
         for film_ids in film_actors.keys():
             for film_cast in film_actors[film_ids]:
                 sql_insert(f"INSERT INTO film_act (id_film, id_act) VALUES ({film_ids}, {actors_ids[film_cast]})")
-            if directors_ids[film_directors[film_ids]]:
-                sql_insert(f"INSERT INTO film_dir (id_film, id_dir) VALUES ({film_ids}, {directors_ids[film_directors[film_ids]]})")
+        for film_ids in film_directors.keys():
+            for film_crew in film_directors[film_ids]:
+                sql_insert(f"INSERT INTO film_dir (id_film, id_dir) VALUES ({film_ids}, {directors_ids[film_crew]})")
         film_actors.clear()
         film_directors.clear()
         print('iteration no. ' + str(part_no) + ' ended')
@@ -241,29 +254,10 @@ def add_cast(partitions_quan=1):
 
 # add_films()
 # add_rating()
-# sort_tag()
-add_cast(5)
-print(no_data_list)
-print(errors_list)
-# print(tags_film)
-
-# str_1 = 'historical'
-# str_2 = 'hisory'
-# str_1 = 'hindi'
-# str_2 = 'india'
-# str_1 = 'funny'
-# str_2 = 'notfunny'
-#
-#
-# print(fuzz.ratio(str_1, str_2))
-# print(fuzz.token_sort_ratio(str_1, str_2))
-# print(fuzz.token_set_ratio(str_1, str_2))
-# print(fuzz.partial_ratio(str_1, str_2))
-# print(fuzz.WRatio(str_1, str_2))
-# print(fuzz.UQRatio(str_1, str_2))
-# print(fuzz.UWRatio(str_1, str_2))
-# print(fuzz.QRatio(str_1, str_2))
-
+sort_tag()
+# add_cast(5)
 
 conn.commit()
 cur.close()
+
+print('exec time is', time.time()-start_time)
