@@ -170,7 +170,7 @@ def sort_tag():
                         if tag_info[1] in list(word_tags[tag_sorted].keys()):
                             word_tags[tag_sorted][tag_info[1]].add(tag_info[0])
                         else:
-                            word_tags[tag_sorted] = {tag_info[1]: {tag_info[0]}}
+                            word_tags[tag_sorted][tag_info[1]] = {tag_info[0]}
                         break
                 else:
                     print('no match for ' + word_list[ii])
