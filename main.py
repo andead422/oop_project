@@ -15,18 +15,6 @@ from fuzzywuzzy import fuzz
 
 start_time = time.time()
 
-genres = []
-films = []
-films_genres = []
-actors = set()
-directors = set()
-actors_actual = set()
-directors_actual = set()
-film_actors = {}
-film_directors = {}
-errors_list = []
-no_data_list = []
-
 conn = pymysql.connect(user=secret.getuser(), password=secret.getpass(), database=secret.getdb())
 cur = conn.cursor()
 tmdb.API_KEY = secret.getapikey()
@@ -62,8 +50,9 @@ def cast_getter(tmdb_id):
 
 
 def add_films():
-    global films
-    global films_genres
+    genres = []
+    films = []
+    films_genres = []
     with open('ml-25m/movies.csv', 'r', newline='\n', encoding='UTF8') as movies_file:
         reader = csv.reader(movies_file, delimiter=',')
         next(reader)
@@ -151,7 +140,7 @@ def sort_tag():
         word_list = tag_info[2].split(' ')
         for ii in range(len(word_list)):
             if len(word_list[ii]) >= 4:
-                print('before corr: ' + word_list[ii])
+                # print('before corr: ' + word_list[ii])
                 if re.search(negation_sep, word_list[ii]):
                     for jj in range(len(word_list[ii + 1:])):
                         if len(word_list[ii + 1 + jj]) >= 4:
@@ -162,32 +151,41 @@ def sort_tag():
                     word_list[ii] = neg_str + word_list[ii][:-4]
                 else:
                     re.sub(negation_tog_start, neg_str, word_list[ii])
-                print('after corr: ' + word_list[ii])
+                # print('after corr: ' + word_list[ii])
                 for tag_sorted in list(word_tags.keys()):
                     match = fuzz.token_sort_ratio(word_list[ii], tag_sorted)
                     if match > 80:
-                        print('match with ' + str(match) + '%: ' + word_list[ii] + ', ' + tag_sorted)
+                        # print('match with ' + str(match) + '%: ' + word_list[ii] + ', ' + tag_sorted)
                         if tag_info[1] in list(word_tags[tag_sorted].keys()):
                             word_tags[tag_sorted][tag_info[1]].add(tag_info[0])
                         else:
                             word_tags[tag_sorted][tag_info[1]] = {tag_info[0]}
                         break
                 else:
-                    print('no match for ' + word_list[ii])
+                    # print('no match for ' + word_list[ii])
                     word_tags[word_list[ii]] = {tag_info[1]: {tag_info[0]}}
     print(word_tags)
     for tag in list(word_tags.keys()):
         if len(word_tags[tag]) < 3:
             word_tags.pop(tag)
+        else:
+            for tag_film in list(word_tags[tag].keys()):
+                if len(word_tags[tag][tag_film]) < 2:
+                    word_tags[tag].pop(tag_film)
+            if len(word_tags[tag]) < 3:
+                word_tags.pop(tag)
     print(word_tags)
 
 
 def add_cast(partitions_quan=1):
-    global actors
-    global film_actors
-    global directors
-    global film_directors
-    global errors_list
+    actors = set()
+    directors = set()
+    actors_actual = set()
+    directors_actual = set()
+    film_actors = {}
+    film_directors = {}
+    errors_list = []
+    no_data_list = []
     links = sql_select_all("SELECT id_film, id_tmdb FROM links")
     quan_films = len(links)
     part_no = 1
