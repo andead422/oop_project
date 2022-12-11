@@ -19,6 +19,8 @@ conn = pymysql.connect(user=secret.getuser(), password=secret.getpass(), databas
 cur = conn.cursor()
 tmdb.API_KEY = secret.getapikey()
 
+word_tags = {}
+
 
 def sql_insert(sql_string):
     cur.execute(sql_string)
@@ -130,7 +132,7 @@ def add_rating():
 
 
 def sort_tag():
-    word_tags = {}
+    global word_tags
     all_tags = sql_select_all("SELECT * FROM tag_tmp")
     negation_tog_start = re.compile(r"^(?:in|un|im|il|ir|de|mis|a|non)(?=\w+)")
     negation_tog_end = re.compile(r"\w+less")
@@ -140,7 +142,7 @@ def sort_tag():
         word_list = tag_info[2].split(' ')
         for ii in range(len(word_list)):
             if len(word_list[ii]) >= 4:
-                # print('before corr: ' + word_list[ii])
+                print('before corr: ' + word_list[ii])
                 if re.search(negation_sep, word_list[ii]):
                     for jj in range(len(word_list[ii + 1:])):
                         if len(word_list[ii + 1 + jj]) >= 4:
@@ -151,18 +153,18 @@ def sort_tag():
                     word_list[ii] = neg_str + word_list[ii][:-4]
                 else:
                     re.sub(negation_tog_start, neg_str, word_list[ii])
-                # print('after corr: ' + word_list[ii])
+                print('after corr: ' + word_list[ii])
                 for tag_sorted in list(word_tags.keys()):
                     match = fuzz.token_sort_ratio(word_list[ii], tag_sorted)
                     if match > 80:
-                        # print('match with ' + str(match) + '%: ' + word_list[ii] + ', ' + tag_sorted)
+                        print('match with ' + str(match) + '%: ' + word_list[ii] + ', ' + tag_sorted)
                         if tag_info[1] in list(word_tags[tag_sorted].keys()):
                             word_tags[tag_sorted][tag_info[1]].add(tag_info[0])
                         else:
                             word_tags[tag_sorted][tag_info[1]] = {tag_info[0]}
                         break
                 else:
-                    # print('no match for ' + word_list[ii])
+                    print('no match for ' + word_list[ii])
                     word_tags[word_list[ii]] = {tag_info[1]: {tag_info[0]}}
     print(word_tags)
     for tag in list(word_tags.keys()):
@@ -175,6 +177,20 @@ def sort_tag():
             if len(word_tags[tag]) < 3:
                 word_tags.pop(tag)
     print(word_tags)
+
+
+def add_tag():
+    global word_tags
+    tags_list = list(word_tags.keys())
+    tags_str = '("' + '"), ("'.join(sorted(tags_list)) + '")'
+    sql_insert(f"INSERT INTO tag (title) VALUES {tags_str}")
+    tag_dict = dict(sql_select_all("SELECT title, id_tag FROM tag"))
+    film_dict = dict(sql_select_all("SELECT id_film_source, id_film FROM film"))
+    for tag in tags_list:
+        for film_tag in list(word_tags[tag].keys()):
+            if film_tag in list(film_dict.keys()):
+                print('film:', film_dict[film_tag], 'tag:', tag, 'tag_id:', tag_dict[tag], 'quantity:', len(word_tags[tag][film_tag]))
+                sql_insert(f"INSERT INTO film_tag (id_film, id_tag, quantity) VALUES ({film_dict[film_tag]}, {tag_dict[tag]}, {len(word_tags[tag][film_tag])})")
 
 
 def add_cast(partitions_quan=1):
@@ -234,8 +250,8 @@ def add_cast(partitions_quan=1):
         print('All actors and directors added to db ' + secret.getdb())
         actors_ids = sql_select_all("SELECT * FROM actors")
         directors_ids = sql_select_all("SELECT * FROM directors")
-        actors_ids = {y: x for x, y in dict(actors_ids).items()}
-        directors_ids = {y: x for x, y in dict(directors_ids).items()}
+        actors_ids = {y: x for x, y in actors_ids}
+        directors_ids = {y: x for x, y in directors_ids}
         for film_ids in film_actors.keys():
             for film_cast in film_actors[film_ids]:
                 sql_insert(f"INSERT INTO film_act (id_film, id_act) VALUES ({film_ids}, {actors_ids[film_cast]})")
@@ -252,10 +268,14 @@ def add_cast(partitions_quan=1):
 
 # add_films()
 # add_rating()
-sort_tag()
 # add_cast(5)
+sort_tag()
+sort_time = time.time()
+print('sort_tag time is', sort_time-start_time)
+add_tag()
 
 conn.commit()
 cur.close()
 
+print('add time is', time.time()-sort_time)
 print('exec time is', time.time()-start_time)
