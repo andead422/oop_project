@@ -1,7 +1,14 @@
 #include "film_admin.hpp"
 
-int FilmAdmin::rateFilm(int idFilm) {
-    cout << "rate film";
+Film& FilmAdmin::setGenre(string genre) {
+    if(findInVector(genres, genre) != -1) {
+        genres.push_back(genre);
+    }
 
-    return 0;
+    return *this;
+}
+
+
+void FilmAdmin::rateFilm(int idFilm) {
+    cout << "rate film";
 }
