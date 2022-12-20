@@ -51,6 +51,21 @@ def cast_getter(tmdb_id):
     return 'NULL'
 
 
+def popul_getter(tmdb_id):
+    flag = 2
+    while flag > 0:
+        try:
+            film_tmdb = tmdb.Movies(tmdb_id)
+            return film_tmdb.info()['popularity']
+        except:
+            print('reconnecting...')
+            # print(err)
+            time.sleep(0.5)
+            flag -= 1
+    return 'NULL'
+
+
+
 def add_films():
     genres = []
     films = []
@@ -129,6 +144,17 @@ def add_rating():
     sql_insert("ALTER TABLE rating MODIFY COLUMN id_film int NOT NULL")
 
     sql_insert("CREATE INDEX index_id_film_r ON rating(id_film)")
+
+
+def add_popul():
+    film_ids = sql_select_all("SELECT t1.id_film, t1.id_tmdb FROM link t1 WHERE t1.id_film IN (SELECT t2.id_film FROM film t2 WHERE t2.popularity IS NULL)")
+    print(len(film_ids))
+    film_ids = dict(film_ids)
+    for film in list(film_ids.keys()):
+        popularity = popul_getter(film_ids[film])
+        if popularity != 'NULL':
+            print('film: ' + str(film) + ', popularity: ' + str(popularity))
+            sql_insert(f"UPDATE film SET popularity = {popularity} WHERE id_film = {film}")
 
 
 def sort_tag():
@@ -269,13 +295,14 @@ def add_cast(partitions_quan=1):
 # add_films()
 # add_rating()
 # add_cast(5)
-sort_tag()
-sort_time = time.time()
-print('sort_tag time is', sort_time-start_time)
-add_tag()
+add_popul()
+# sort_tag()
+# sort_time = time.time()
+# print('sort_tag time is', sort_time-start_time)
+# add_tag()
 
 conn.commit()
 cur.close()
 
-print('add time is', time.time()-sort_time)
+# print('add time is', time.time()-sort_time)
 print('exec time is', time.time()-start_time)
