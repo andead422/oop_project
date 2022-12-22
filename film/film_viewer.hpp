@@ -4,24 +4,35 @@
 #include "film.hpp"
 
 class FilmViewer: public Film {
-    string imdbId;
+    vector<int> filmGenres;
+
+    //map<genre, pair<count, 0 rate>>
+    static map<int, pair<int, int>> Genres;
+    //map<id_film, rate>
+    static map<int, double> Reccomended;
+    static int FilmsNumber;
 
 public:
-    FilmViewer() = default;
-    FilmViewer(int idFilm, string titleFilm, string genre, double userRate, string imdbId): Film(idFilm, titleFilm, genre, userRate), imdbId(imdbId) {}
+    FilmViewer();
+    FilmViewer(int idFilm): Film(idFilm),
+                            filmGenres(database.getFilmGenres(idFilm)) {}
     FilmViewer(const FilmViewer&) = default;
     FilmViewer(FilmViewer&&) = default;
     ~FilmViewer() = default;
 
-    string getImdbId() { return imdbId; }
+    map<int, double> getStats() { return Reccomended; }
 
-    FilmViewer& setImdbId(string imdbId) { this->imdbId = imdbId; return *this; }
+    void rateFilm(int) override;
 
     FilmViewer& operator =(const FilmViewer& filmViewer);
     //getFilmImage();
 
-private: 
-    int rateFilm(int idFilm) override;
+private:
+    void fillMap();
+    bool checkMap();
+    void incrementRated(int);
 };
+
+int FilmViewer::FilmsNumber = database.getFilmsNumber();
 
 #endif
