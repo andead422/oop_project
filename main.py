@@ -65,6 +65,19 @@ def popul_getter(tmdb_id):
     return 'NULL'
 
 
+def rate_getter(tmdb_id):
+    flag = 2
+    while flag > 0:
+        try:
+            film_tmdb = tmdb.Movies(tmdb_id)
+            return [film_tmdb.info()['vote_average'], film_tmdb.info()['vote_count']]
+        except:
+            print('reconnecting...')
+            # print(err)
+            time.sleep(0.5)
+            flag -= 1
+    return 'NULL'
+
 
 def add_films():
     genres = []
@@ -292,14 +305,22 @@ def add_cast(partitions_quan=1):
         part_no += 1
 
 
+def add_tmdb_rate():
+    rate_info = sql_select_all("SELECT t1.id_film, t1.id_tmdb, t2.avg_rate, t2.marks_quantity FROM link t1 WHERE t1.id_film IN (SELECT t2.id_film FROM rating t2 WHERE t2.flag = 0)")
+    print(len(rate_info))
+    for film_rate in rate_info:
+        rate_tmdb_details = rate_getter(film_rate[1])
+        sql_insert(f"UPDATE rating SET avg_rate = {rate_info[2] + (rate_tmdb_details[0] / 2)}, marks_quantity = {rate_info[3] + rate_tmdb_details[1]}, flag = 1 WHERE id_film = {rate_info[0]}")
+
 # add_films()
 # add_rating()
 # add_cast(5)
-add_popul()
+# add_popul()
 # sort_tag()
 # sort_time = time.time()
 # print('sort_tag time is', sort_time-start_time)
 # add_tag()
+add_tmdb_rate()
 
 conn.commit()
 cur.close()
