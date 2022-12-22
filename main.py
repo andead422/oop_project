@@ -313,12 +313,15 @@ def add_cast(partitions_quan=1):
 
 def add_tmdb_rate():
     rate_info = sql_select_all(
-        "SELECT t1.id_film, t1.id_tmdb, t2.avg_rate, t2.marks_quantity FROM link t1 WHERE t1.id_film IN (SELECT t2.id_film FROM rating t2 WHERE t2.flag = 0)")
+        "SELECT t1.id_film, t1.id_tmdb, (SELECT t2.avg_rate FROM rating t2 WHERE t2.id_film = t1.id_film), (SELECT t2.marks_quantity FROM rating t2 WHERE t2.id_film = t1.id_film) FROM link t1 WHERE t1.id_film IN (SELECT t2.id_film FROM rating t2 WHERE t2.flag = 0)")
     print(len(rate_info))
     for film_rate in rate_info:
         rate_tmdb_details = rate_getter(film_rate[1])
-        sql_insert(
-            f"UPDATE rating SET avg_rate = {rate_info[2] + (rate_tmdb_details[0] / 2)}, marks_quantity = {rate_info[3] + rate_tmdb_details[1]}, flag = 1 WHERE id_film = {rate_info[0]}")
+        print(rate_tmdb_details)
+        new_people_count = film_rate[3] + rate_tmdb_details[1]
+        new_avg_rate = (film_rate[2] * film_rate[3] + rate_tmdb_details[0] * rate_tmdb_details[1] / 2) / new_people_count
+        print('id_film:', film_rate[0], 'id_tmdb:', film_rate[1], 'avg_rate:', new_avg_rate, 'people count:', new_people_count)
+        sql_insert(f"UPDATE rating SET avg_rate = ROUND({new_avg_rate},5), marks_quantity = {new_people_count}, flag = 1 WHERE id_film = {film_rate[0]}")
 
 
 # add_films()
