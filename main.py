@@ -148,7 +148,8 @@ def add_films():
 
 
 def add_rating():
-    sql_insert("UPDATE rating t1 SET t1.id_film = (SELECT t2.id_film FROM film t2 WHERE t2.id_film_source = t1.id_film_source)")
+    sql_insert(
+        "UPDATE rating t1 SET t1.id_film = (SELECT t2.id_film FROM film t2 WHERE t2.id_film_source = t1.id_film_source)")
 
     print('All films connected to rating in db ' + secret.getdb())
 
@@ -160,7 +161,8 @@ def add_rating():
 
 
 def add_popul():
-    film_ids = sql_select_all("SELECT t1.id_film, t1.id_tmdb FROM link t1 WHERE t1.id_film IN (SELECT t2.id_film FROM film t2 WHERE t2.popularity IS NULL)")
+    film_ids = sql_select_all(
+        "SELECT t1.id_film, t1.id_tmdb FROM link t1 WHERE t1.id_film IN (SELECT t2.id_film FROM film t2 WHERE t2.popularity IS NULL)")
     print(len(film_ids))
     film_ids = dict(film_ids)
     for film in list(film_ids.keys()):
@@ -228,8 +230,10 @@ def add_tag():
     for tag in tags_list:
         for film_tag in list(word_tags[tag].keys()):
             if film_tag in list(film_dict.keys()):
-                print('film:', film_dict[film_tag], 'tag:', tag, 'tag_id:', tag_dict[tag], 'quantity:', len(word_tags[tag][film_tag]))
-                sql_insert(f"INSERT INTO film_tag (id_film, id_tag, quantity) VALUES ({film_dict[film_tag]}, {tag_dict[tag]}, {len(word_tags[tag][film_tag])})")
+                print('film:', film_dict[film_tag], 'tag:', tag, 'tag_id:', tag_dict[tag], 'quantity:',
+                      len(word_tags[tag][film_tag]))
+                sql_insert(
+                    f"INSERT INTO film_tag (id_film, id_tag, quantity) VALUES ({film_dict[film_tag]}, {tag_dict[tag]}, {len(word_tags[tag][film_tag])})")
 
 
 def add_cast(partitions_quan=1):
@@ -246,7 +250,7 @@ def add_cast(partitions_quan=1):
     part_no = 1
     cur_film_id = 0
     while part_no <= partitions_quan:
-        while quan_films*((part_no-1)/partitions_quan) <= cur_film_id <= quan_films*(part_no/partitions_quan):
+        while quan_films * ((part_no - 1) / partitions_quan) <= cur_film_id <= quan_films * (part_no / partitions_quan):
             film = links[cur_film_id]
             result = cast_getter(film[1])
             if result != 'NULL':
@@ -256,14 +260,16 @@ def add_cast(partitions_quan=1):
                     film_directors[film[0]] = []
                     for cast in result['cast']:
                         if counter < 5:
-                            if not (cast['original_name'].replace('"', '\\"') in actors or cast['original_name'].replace('"', '\\"') in actors_actual):
+                            if not (cast['original_name'].replace('"', '\\"') in actors or cast[
+                                'original_name'].replace('"', '\\"') in actors_actual):
                                 actors_actual.add(cast['original_name'].replace('"', '\\"'))
                                 actors.add(cast['original_name'].replace('"', '\\"'))
                             film_actors[film[0]].append(cast['original_name'].replace('"', '\\"'))
                             counter += 1
                     for crew in result['crew']:
                         if crew['job'] == 'Director':
-                            if not (crew['original_name'].replace('"', '\\"') in directors or cast['original_name'].replace('"', '\\"') in directors_actual):
+                            if not (crew['original_name'].replace('"', '\\"') in directors or cast[
+                                'original_name'].replace('"', '\\"') in directors_actual):
                                 directors_actual.add(crew['original_name'].replace('"', '\\"'))
                                 directors.add(crew['original_name'].replace('"', '\\"'))
                             film_directors[film[0]].append(crew['original_name'].replace('"', '\\"'))
@@ -306,11 +312,14 @@ def add_cast(partitions_quan=1):
 
 
 def add_tmdb_rate():
-    rate_info = sql_select_all("SELECT t1.id_film, t1.id_tmdb, t2.avg_rate, t2.marks_quantity FROM link t1 WHERE t1.id_film IN (SELECT t2.id_film FROM rating t2 WHERE t2.flag = 0)")
+    rate_info = sql_select_all(
+        "SELECT t1.id_film, t1.id_tmdb, t2.avg_rate, t2.marks_quantity FROM link t1 WHERE t1.id_film IN (SELECT t2.id_film FROM rating t2 WHERE t2.flag = 0)")
     print(len(rate_info))
     for film_rate in rate_info:
         rate_tmdb_details = rate_getter(film_rate[1])
-        sql_insert(f"UPDATE rating SET avg_rate = {rate_info[2] + (rate_tmdb_details[0] / 2)}, marks_quantity = {rate_info[3] + rate_tmdb_details[1]}, flag = 1 WHERE id_film = {rate_info[0]}")
+        sql_insert(
+            f"UPDATE rating SET avg_rate = {rate_info[2] + (rate_tmdb_details[0] / 2)}, marks_quantity = {rate_info[3] + rate_tmdb_details[1]}, flag = 1 WHERE id_film = {rate_info[0]}")
+
 
 # add_films()
 # add_rating()
@@ -326,4 +335,4 @@ conn.commit()
 cur.close()
 
 # print('add time is', time.time()-sort_time)
-print('exec time is', time.time()-start_time)
+print('exec time is', time.time() - start_time)
