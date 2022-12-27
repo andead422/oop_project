@@ -10,5 +10,5 @@ Film& FilmAdmin::setGenre(string genre) {
 
 
 void FilmAdmin::rateFilm(int idFilm) {
-    cout << "rate film";
+    cout << "rateFilm(): FilmAdmin" << endl;
 }

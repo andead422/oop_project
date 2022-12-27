@@ -24,9 +24,6 @@ public:
 
     void rateFilm(int) override;
 
-    FilmViewer& operator =(const FilmViewer& filmViewer);
-    //getFilmImage();
-
 private:
     void fillMap();
     bool checkMap();
