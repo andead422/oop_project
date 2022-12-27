@@ -47,4 +47,6 @@ FilmViewer::FilmViewer() {
 void FilmViewer::rateFilm(int rate) {
     incrementRated(rate);
     Reccomended[this->getId()] = rate;
+
+    //cout << "rateFilm(): FilmViewer" << endl;
 }

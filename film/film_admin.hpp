@@ -5,6 +5,7 @@
 
 class FilmAdmin: public Film {
     string title;
+    double rate;
     string picture;
     string overview;
     string crew;

@@ -25,7 +25,7 @@ public:
 protected:
     // arr getMovieData(int idFilm);
 
-    //s porno
+    //в общем если хранить обьекты дочерних классов в указателе на батькивськый(меньше памяти) то смысл имеет  
     virtual void rateFilm(int) = 0;
 };
 
