@@ -284,10 +284,6 @@ def add_tag():
                     f"INSERT INTO film_tag (id_film, id_tag, quantity) VALUES ({film_dict[film_tag]}, {tag_dict[tag]}, {len(word_tags[tag][film_tag])})")
 
 
-def test():
-    print(11111)
-
-
 def add_cast(partitions_quan=1):
     actors = set()
     directors = set()
