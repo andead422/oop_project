@@ -1,16 +1,6 @@
 #include "film_viewer.hpp"
 
-void FilmViewer::fillMap() {
-    int genresNumber = database.getGenresNumber();
-
-    //starts from 0?
-    for (int ii = 0; ii <= genresNumber; ii++) {
-        Genres[ii].first = 0;
-        Genres[ii].second = 0;
-    }
-}
-
-bool FilmViewer::checkMap() {
+bool FilmViewer::checkMap() const {
     for (int ii = 0; ii < filmGenres.size(); ++ii) {
         if (Genres[filmGenres[ii]].first > 3 || Genres[filmGenres[ii]].second > 3) {
             return false;
@@ -36,7 +26,7 @@ FilmViewer::FilmViewer() {
 
     do {
         idFilm = rand()%(FilmsNumber + 1);
-        filmGenres = database.getFilmGenres(idFilm);
+        filmGenres = DBConnect::getFilmGenres(idFilm);
     } while(!checkMap());
 
     setId(idFilm);
@@ -46,7 +36,8 @@ FilmViewer::FilmViewer() {
 
 void FilmViewer::rateFilm(int rate) {
     incrementRated(rate);
-    Reccomended[this->getId()] = rate;
+    Recommended[this->getId()] = rate;
 
     //cout << "rateFilm(): FilmViewer" << endl;
 }
+

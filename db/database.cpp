@@ -8,19 +8,19 @@ int DBConnect::getGenresNumber() {
     return 19;
 }
 
-int DBConnect::getFilmsNumber() {
+const int DBConnect::getFilmsNumber() {
     return 100500;
 }
 
-string getFilmName(int) {
+string DBConnect::getFilmName(int) {
     return "LA LA LAND";
 }
 
-string getFilmDirector(int) {
+string DBConnect::getFilmDirector(int) {
     return "Damien Chazelle";
 }
 
-vector<string> getFilmCast(int) {
+vector<string> DBConnect::getFilmCast(int) {
     return {"Emily Jean", "Ryan Thomas Gosling"};
 }
 //parilka

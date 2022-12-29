@@ -1,3 +1,6 @@
+#ifndef DATE_H
+#define DATE_H
+
 #include "../includes.hpp"
 
 class Date {
@@ -6,14 +9,7 @@ class Date {
     int year;
 
 public:
-    Date() {
-        time_t t = time(0);
-        tm* now = localtime(&t);
-
-        day = now->tm_mday;
-        month = now->tm_mon + 1;
-        year = now->tm_year + 1900;
-    }
+    Date();
     Date(int day, int month, int year): day(day), month(month), year(year) {}
     Date(Date&) = default;
     //delat proverki?
@@ -29,3 +25,5 @@ public:
 
     void printDate() const { cout << day << "." << month << "." << year; }
 };
+
+#endif

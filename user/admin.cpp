@@ -1,21 +1,21 @@
 #include "admin.hpp"
 
-bool Administrator::addFilm(int) {
+void Administrator::addFilm(int) const {
 
 }
 
-void Administrator::removeFilm(int) {
+void Administrator::removeFilm(int) const {
     
 }
 
-FilmAdmin Administrator::seeFilmStats(int) {
-
+FilmAdmin Administrator::seeFilmStats(int id) const {
+    return FilmAdmin(id);
 }
 
 // Viewer Administrator::seeViewerStats(int) {
 
 // }
 
-bool Administrator::authorization() {
-
+bool Administrator::authorization() const {
+    return true;
 }

@@ -1,5 +1,5 @@
-#ifndef film_viewer
-#define film_viewer
+#ifndef FILM_VIEWER_H
+#define FILM_VIEWER_H
 
 #include "film.hpp"
 
@@ -7,29 +7,38 @@ class FilmViewer: public Film {
     vector<int> filmGenres;
 
     //map<genre, pair<count, 0 rate>>
-    static map<int, pair<int, int>> Genres;
+    static vector<pair<int, int>> Genres;
     //map<id_film, rate>
-    static map<int, double> Reccomended;
+    static map<int, double> Recommended;
     static int FilmsNumber;
 
 public:
     FilmViewer();
     FilmViewer(int idFilm): Film(idFilm),
-                            filmGenres(database.getFilmGenres(idFilm)) {}
+                            filmGenres(DBConnect::getFilmGenres(idFilm)) {}
     FilmViewer(const FilmViewer&) = default;
     FilmViewer(FilmViewer&&) = default;
     ~FilmViewer() = default;
 
-    map<int, double> getStats() { return Reccomended; }
+    vector<int> getFilmGenres() const { return filmGenres; }
+    map<int, double> getRecommendedStats() const { return Recommended; }
+    vector<pair<int, int>> getGenresStats() const { return Genres; }
+    int getFilmsNumber() const { return FilmsNumber; }
+
+    FilmViewer& setfilmGenres( vector<int> filmGenres ) { this->filmGenres = filmGenres; return *this; }
+    FilmViewer& setfilmGenre( int filmGenre ) { addToSet(filmGenres, filmGenre); return *this; }
 
     void rateFilm(int) override;
 
+    bool operator == (const FilmViewer& other) const { return filmGenres == other.filmGenres; }
+    FilmViewer& operator=(const FilmViewer& other) { filmGenres == other.filmGenres; return *this; }
+
 private:
-    void fillMap();
-    bool checkMap();
+    bool checkMap() const;
     void incrementRated(int);
 };
 
-int FilmViewer::FilmsNumber = database.getFilmsNumber();
+int FilmViewer::FilmsNumber = DBConnect::getFilmsNumber();
+vector<pair<int, int>> FilmViewer::Genres(DBConnect::getGenresNumber(), {0,0});
 
 #endif

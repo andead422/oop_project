@@ -1,11 +1,9 @@
-#ifndef film
-#define film
+#ifndef FILM_H
+#define FILM_H
 
 #include "../includes.hpp"
 
 using std::string;
-
-DBConnect database;
 
 class Film {
     int idFilm;
@@ -17,7 +15,7 @@ public:
     Film(Film&&) = default;
     ~Film() = default;
 
-    int getId() { return idFilm; }
+    int getId() const { return idFilm; }
     Film& setId(int idFilm) { this->idFilm = idFilm; return *this; }
 
     Film& operator =(const Film& filmOper) { idFilm = filmOper.idFilm; return *this; }

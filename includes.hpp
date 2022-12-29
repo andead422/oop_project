@@ -1,5 +1,5 @@
-#ifndef includes
-#define includes
+#ifndef INCLUDES_H
+#define INCLUDES_H
 
 #include <iostream>
 // #include <vector>
@@ -7,7 +7,7 @@
 #include <map>
 #include <random>
 
-#include "database.hpp"
+#include "db/database.hpp"
 
 // using std::vector;
 using std::map;
@@ -17,16 +17,18 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::rand;
+using std::max;
 
 template<typename T>
-int findInVector(const vector<T>& vec, const T& element) {
-    for(int ii = 0; ii < vec.size(); ++ii) {
-        if(vec[ii] == element) {
-            return ii;
-        }
-    }
+int findInVector(const vector<T>&, const T&);
 
-    return -1;
-}
+template<typename T>
+void addToSet(vector<T>&, const T&);
+
+string& to_string(string& str) { return str;}
+
+template<typename T>
+string to_string(const vector<T>&, const string&);
+
 
 #endif

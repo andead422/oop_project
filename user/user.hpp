@@ -1,5 +1,5 @@
-#ifndef user
-#define user
+#ifndef USER_H
+#define USER_H
 
 #include "../film/film.hpp"
 #include "../includes.hpp"
@@ -10,12 +10,12 @@ class User {
 
 public:
     User(): idUser(userCount++) {}
-    //User(int idUser): idUser(idUser) {}
-    User(const User&) = default;
+    User(int idUser) { userCount++; this->idUser = max(userCount, idUser); }
+    User(const User&) = delete;
     ~User() = default;
 
-    int getIdU() { return idUser; }
-    //User& setIdU(int idUser) { this->idUser = idUser; return *this; }
+    int getIdU() const { return idUser; }
+    User& setIdU(int);
 };
 
 #endif

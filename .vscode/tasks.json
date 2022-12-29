@@ -8,6 +8,7 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "${fileDirname}/*.cpp",
+                "${fileDirname}/*/*.cpp",
                 "-o",
                 "${fileDirname}/main",
                 "`mysql_config --libs`",
