@@ -10,7 +10,7 @@ class Viewer: public User {
     vector<FilmViewer> ratedFilms;
 
     //vector[genre]<pair<count, 0 rate>>
-    vector<pair<int, int>> Genres = vector(database.getGenresNumber(), pair(0,0));
+    vector<pair<int, int>> Genres = vector(database->getGenresNumber(), pair(0,0));
 
 public:
     Viewer() = default;
