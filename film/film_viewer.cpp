@@ -1,10 +1,10 @@
 #include "film_viewer.hpp"
 
 //map<genre, pair<count, 0 rate>>
-vector<pair<int, int>> FilmViewer::Genres(database.getGenresNumber(), {0,0});
+vector<pair<int, int>> FilmViewer::Genres(database->getGenresNumber(), {0,0});
 //map<id_film, rate>
 map<int, double> FilmViewer::Recommended;
-int FilmViewer::FilmsNumber(database.getFilmsNumber());
+int FilmViewer::FilmsNumber(database->getFilmsNumber());
 
 
 bool FilmViewer::checkMap() const {
@@ -33,7 +33,7 @@ FilmViewer::FilmViewer() {
 
     do {
         idFilm = rand() % (FilmsNumber + 1);
-        filmGenres = database.getFilmGenres(idFilm);
+        filmGenres = database->getFilmGenres(idFilm);
     } while(!checkMap());
 
     setId(idFilm);

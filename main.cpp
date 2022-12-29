@@ -4,13 +4,10 @@
 #include "user/admin.hpp"
 #include "user/viewer.hpp"
 
-DBConnect database;
+
+DBConnect* database = DBConnect::GetInstance();
 
 int main()
 {
-    // DBConnect database;
-    Date dt;
-    dt.printDate();
-    cout << endl;
-    cout << FilmViewer::getFilmsNumber();
+    cout << to_string(database->getFilmGenres(4));
 }

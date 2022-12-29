@@ -15,5 +15,6 @@
 genome-scores.csv
 ratings.csv
 secret.py
+secret.hpp
 test
 test.*
