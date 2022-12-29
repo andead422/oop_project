@@ -26,7 +26,7 @@ FilmViewer::FilmViewer() {
 
     do {
         idFilm = rand()%(FilmsNumber + 1);
-        filmGenres = DBConnect::getFilmGenres(idFilm);
+        filmGenres = database.getFilmGenres(idFilm);
     } while(!checkMap());
 
     setId(idFilm);
@@ -37,7 +37,5 @@ FilmViewer::FilmViewer() {
 void FilmViewer::rateFilm(int rate) {
     incrementRated(rate);
     Recommended[this->getId()] = rate;
-
-    //cout << "rateFilm(): FilmViewer" << endl;
 }
 

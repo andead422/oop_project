@@ -7,7 +7,9 @@
 using std::vector;
 using std::string;
 
-namespace DBConnect {
+class DBConnect {
+    //parilka
+public:
     int getGenresNumber();
     const int getFilmsNumber();
     string getFilmName(int);

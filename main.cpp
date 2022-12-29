@@ -4,9 +4,12 @@
 #include "user/admin.hpp"
 #include "user/viewer.hpp"
 
+DBConnect database;
 
 int main()
 {
+    cout << "111";
+    // DBConnect database;
     Date dt;
     dt.printDate();
     cout << endl;

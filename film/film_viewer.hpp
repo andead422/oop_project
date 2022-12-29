@@ -2,6 +2,10 @@
 #define FILM_VIEWER_H
 
 #include "film.hpp"
+#include "../includes.hpp"
+#include "../db/database.hpp"
+
+// DBConnect database;
 
 class FilmViewer: public Film {
     vector<int> filmGenres;
@@ -11,11 +15,11 @@ class FilmViewer: public Film {
     //map<id_film, rate>
     static map<int, double> Recommended;
     static int FilmsNumber;
-
+    
 public:
     FilmViewer();
     FilmViewer(int idFilm): Film(idFilm),
-                            filmGenres(DBConnect::getFilmGenres(idFilm)) {}
+                            filmGenres(database.getFilmGenres(idFilm)) {}
     FilmViewer(const FilmViewer&) = default;
     FilmViewer(FilmViewer&&) = default;
     ~FilmViewer() = default;
@@ -38,7 +42,12 @@ private:
     void incrementRated(int);
 };
 
-int FilmViewer::FilmsNumber = DBConnect::getFilmsNumber();
-vector<pair<int, int>> FilmViewer::Genres(DBConnect::getGenresNumber(), {0,0});
+// int FilmViewer::FilmsNumber = database.getFilmsNumber();
+
+//map<genre, pair<count, 0 rate>>
+vector<pair<int, int>> FilmViewer::Genres(database.getGenresNumber(), {0,0});
+//map<id_film, rate>
+map<int, double> FilmViewer::Recommended;
+int FilmViewer::FilmsNumber(database.getFilmsNumber());
 
 #endif
