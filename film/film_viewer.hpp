@@ -13,7 +13,7 @@ class FilmViewer: public Film {
 public:
     FilmViewer() = default;
     FilmViewer(int idFilm): Film(idFilm),
-                            filmGenres(database.getFilmGenres(idFilm)) {}
+                            filmGenres(database->getFilmGenres(idFilm)) {}
     FilmViewer(const FilmViewer&) = default;
     FilmViewer(FilmViewer&&) = default;
     ~FilmViewer() = default;

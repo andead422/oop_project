@@ -9,7 +9,7 @@
 
 #include "db/database.hpp"
 
-extern DBConnect database;
+extern DBConnect* database;
 
 using std::vector;
 using std::map;

@@ -4,7 +4,8 @@
 #include "user/admin.hpp"
 #include "user/viewer.hpp"
 
-DBConnect database;
+
+DBConnect* database = DBConnect::GetInstance();
 
 int main()
 {
