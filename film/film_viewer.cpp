@@ -1,5 +1,12 @@
 #include "film_viewer.hpp"
 
+//map<genre, pair<count, 0 rate>>
+vector<pair<int, int>> FilmViewer::Genres(database.getGenresNumber(), {0,0});
+//map<id_film, rate>
+map<int, double> FilmViewer::Recommended;
+int FilmViewer::FilmsNumber(database.getFilmsNumber());
+
+
 bool FilmViewer::checkMap() const {
     for (int ii = 0; ii < filmGenres.size(); ++ii) {
         if (Genres[filmGenres[ii]].first > 3 || Genres[filmGenres[ii]].second > 3) {

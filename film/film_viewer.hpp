@@ -2,8 +2,6 @@
 #define FILM_VIEWER_H
 
 #include "film.hpp"
-#include "../includes.hpp"
-#include "../db/database.hpp"
 
 // DBConnect database;
 
@@ -41,13 +39,5 @@ private:
     bool checkMap() const;
     void incrementRated(int);
 };
-
-// int FilmViewer::FilmsNumber = database.getFilmsNumber();
-
-//map<genre, pair<count, 0 rate>>
-vector<pair<int, int>> FilmViewer::Genres(database.getGenresNumber(), {0,0});
-//map<id_film, rate>
-map<int, double> FilmViewer::Recommended;
-int FilmViewer::FilmsNumber(database.getFilmsNumber());
 
 #endif
