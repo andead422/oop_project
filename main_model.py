@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import ast
 from pymysql import connect
 
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
@@ -21,7 +22,6 @@ query = QUERY
 cur.execute(query)
 df_film = pd.read_sql(query, data_base)
 df_film['id_film'] = df_film['id_film'].astype(int)
-print(df_film.dtypes)
 
 
 #Створення щось по типу свого IMDB рейтингу
@@ -39,7 +39,6 @@ def weighted_rating(x):
 
 df_film['wr'] = df_film.apply(weighted_rating, axis=1)
 test_ds = df_film.sort_values('wr', ascending=False).head(20)
-print(test_ds)
 
 
 #Закидуємо всю ключову інфу про фільм в одну колонку "суп"
@@ -58,7 +57,6 @@ cosine_sim = cosine_similarity(count_matrix, count_matrix)
 df_film = df_film.reset_index()
 id_films = df_film['id_film']
 indices = pd.Series(df_film.index, index=df_film['id_film'])
-print(indices)
 
 #Функція отримання косинусу подібності всіх фільмів з фільмом 'id_film'
 def get_recommendations(id_film):
@@ -68,16 +66,15 @@ def get_recommendations(id_film):
 
 
 #Сама рекомендаційна система. На вхід отримує кількість фільмів які юзеров оцінив. Далі по черзі на вхід отримуємо id_film(72) і film_mark(75).
-def recommendation_system(film_count):
+def recommendation_system(string_dict_of_films):
+    dict_of_films = ast.literal_eval(string_dict_of_films)
+    film_count = len(dict_of_films)
     arr = np.zeros(indices.size)
-    print(arr.size)
     user_film_id_idx = set()
-    for i in range(film_count):
-        print('Film id: ', end='')
-        user_film_id = int(input())
+    for key, value  in dict_of_films.items():
+        user_film_id = key
         user_film_id_idx.add(indices[user_film_id])
-        print('Film score: ', end='')
-        film_score = int(input())
+        film_score = value
         k = film_score / 5.
         arr = arr + get_recommendations(user_film_id) * k / film_count
 
@@ -86,6 +83,6 @@ def recommendation_system(film_count):
     sim_scores = sim_scores[0:30]
     movie_indices = {i[0] for i in sim_scores}
     movie_indices = movie_indices - user_film_id_idx
-    return id_films.iloc[list(movie_indices)]
-
-
+    ans = id_films.iloc[list(movie_indices)].head(5).tolist()
+    s = ''.join(str(x)+" " for x in ans)
+    return s
