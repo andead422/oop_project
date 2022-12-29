@@ -32,7 +32,7 @@ FilmViewer::FilmViewer() {
     int idFilm;
 
     do {
-        idFilm = rand()%(FilmsNumber + 1);
+        idFilm = rand() % (FilmsNumber + 1);
         filmGenres = database.getFilmGenres(idFilm);
     } while(!checkMap());
 

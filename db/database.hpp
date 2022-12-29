@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <mysql/mysql.h>
 
 using std::vector;
 using std::string;

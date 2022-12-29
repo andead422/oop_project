@@ -12,4 +12,5 @@ int main()
     Date dt;
     dt.printDate();
     cout << endl;
+    cout << FilmViewer::getFilmsNumber();
 }

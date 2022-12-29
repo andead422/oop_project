@@ -2,8 +2,8 @@
 #define INCLUDES_H
 
 #include <iostream>
-// #include <vector>
-// #include <string>
+#include <vector>
+#include <string>
 #include <map>
 #include <random>
 
@@ -20,18 +20,7 @@ using std::cout;
 using std::endl;
 using std::rand;
 using std::max;
-
-// template<typename T>
-// extern int findInVector(const vector<T>&, const T&);
-
-// template<typename T>
-// extern void addToSet(vector<T>&, const T&);
-
-inline string& to_string(string& str) { return str;}
-
-// template<typename T>
-// extern string to_string(const vector<T>&, const string&);
-
+using std::to_string;
 
 template<typename T>
 int findInVector(const vector<T>& vec, const T& element) {
@@ -50,6 +39,8 @@ void addToSet(vector<T>& vec, const T& element) {
         vec.push_back(element);
     }
 }
+
+inline string& to_string(string& str) { return str;}
 
 template<typename T>
 string to_string(const vector<T>& vec, const string& delim = ", ") {

@@ -25,7 +25,7 @@ public:
     vector<int> getFilmGenres() const { return filmGenres; }
     map<int, double> getRecommendedStats() const { return Recommended; }
     vector<pair<int, int>> getGenresStats() const { return Genres; }
-    int getFilmsNumber() const { return FilmsNumber; }
+    static int getFilmsNumber() { return FilmsNumber; }
 
     FilmViewer& setfilmGenres( vector<int> filmGenres ) { this->filmGenres = filmGenres; return *this; }
     FilmViewer& setfilmGenre( int filmGenre ) { addToSet(filmGenres, filmGenre); return *this; }
