@@ -10,54 +10,71 @@ DBConnect* database = DBConnect::GetInstance();
 int main()
 {
     //-----------------------------------------------------------------------------------------Date
-    cout << "------------------------------DATE------------------------------" << endl;
-    Date dt, test(23, 12, 2003);
+    cout << "------------------------------DATE------------------------------" << endl << endl;
+    Date date0, date2(23, 12, 2003);
 
     cout << "Date(): **using printDate()**" << endl;
-    dt.printDate();
-    cout << endl;
+    cout << "date0: ";
+    date0.printDate();
+    cout << endl << endl;
 
     cout << "Date(int, int, int): **using cout<<**" << endl;
-    cout << test << endl;
-
-    cin >> test;
+    cout << "date2" << endl;
+    cout << date2 << endl;
+    
     cout << "cin >>: " << endl;
-    cout << test << endl;
+    cin >> date2;
+    cout << "date2" << endl;
+    cout << date2 << endl;
 
-    Date dt1(test);
-    cout << "Date(const Date&):" << endl;
-    cout << dt1 << endl;
+    Date date1(date2);
+    cout << "Date(const Date&):" << endl << "date1" << endl;
+    cout << date1 << endl;
 
-    bool a = dt == dt1;
-    cout << a << endl;
 
-    bool b = dt > dt1;
-    cout << b << endl;
+    bool a = date2 == date1;
+    cout << "date1 == date2: " << a << endl;
 
-    ++dt;
-    dt.printDate();
+    bool b = date0 > date1;
+    cout << "date0 > date1: " << b << endl;
+
+    cout << "++date0: ";
+    (++date0).printDate();
     cout << endl;
 
-    dt++;
-    dt.printDate();
+    cout << "date0++: ";
+    (date0++).printDate();
     cout << endl;
 
-    b = dt != dt1;
-    cout << b << endl;
+    b = date0 != date1;
+    cout << "date0 != date1: " << b << endl;
 
-    a = dt < dt1;
-    cout << a << endl;
+    a = date0 < date1;
+    cout << "date0 < date1: " << a << endl;
     /*
-    dt1 = test + dt;
-    dt1.printDate();
+    date1 = date2 + date0;
+    date1.printDate();
     cout << endl;
     */
 
-
     //-----------------------------------------------------------------------------------------FilmViewer
+    FilmViewer fv1, fv2(100), fv3(fv1);
 
+    cout << "FilmViewer():" << "fv1" << endl;
+    cout << to_string(fv1) << endl;
 
+    cout << "FilmViewer(int id):" << "fv2" << endl;
+    int id;
+    cin >> id;
+    cout << to_string(fv2) << endl;
 
+    cout << "FilmViewer(FilmViewer&):" << "fv3" << endl;
+    cout << to_string(fv3) << endl;
+
+    a = fv1 == fv2;
+    cout << "date1 == date2: " << a << endl;
+
+     
     //-----------------------------------------------------------------------------------------FilmAdmin
 
 

@@ -28,10 +28,10 @@ public:
     FilmViewer& setfilmGenre( int filmGenre ) { addToSet(filmGenres, filmGenre); return *this; }
     FilmViewer& setFilmRate(double rate) { this->rate = rate; return *this; }
 
-    bool operator == (const FilmViewer& other) const { return filmGenres == other.filmGenres; }
-    FilmViewer& operator=(const FilmViewer& other) { filmGenres == other.filmGenres; return *this; }
+    bool operator == (const FilmViewer& other) const { return filmGenres == other.filmGenres && idFilm == other.idFilm && rate == other.rate; }
+    FilmViewer& operator=(const FilmViewer& other) { filmGenres = other.filmGenres; return *this; }
 };
 
-string to_string(FilmViewer film);
+string to_string(FilmViewer& film) { return to_string(film.getId()) + ": " + to_string(film.getFilmRate()); }
 
 #endif
