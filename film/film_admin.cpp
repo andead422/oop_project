@@ -12,16 +12,25 @@ FilmAdmin::FilmAdmin(int idFilm): Film(idFilm) {
 }
 
 
-void FilmAdmin::rateFilm(int idFilm) {
-    cout << "rateFilm(): FilmAdmin" << endl;
+FilmAdmin::operator string() const {
+    string output;
+    output += title + " (" + to_string(year) + ")\n"; 
+    output += "Rate: " + to_string(rate) + "\n";
+    output += "Genres: " + to_string(genres) + "\n";
+    output += "Director: " + director + "\n";
+    output += "Cast: " + to_string(cast) + "\n";
+    output += "Overview: " + overview + "\n";
+    output += "Picture: " + picture;
+
+    return output;
 }
 
-void FilmAdmin::printInfo() const { 
-    cout << title << " (" << year << ")" << endl; 
-    cout << "Rate: " << rate << endl;
-    cout << "Genres: " << to_string(genres) << endl;
-    cout << "Director: " << director << endl;
-    cout << "Cast: " << to_string(cast) << endl;
-    cout << "Overview: " << overview << endl;
-    cout << "Picture: " << picture << endl;
+
+void FilmAdmin::printInfo() const {
+    cout << (string) *this;
+}
+
+std::ostream& operator << (std::ostream& out, const FilmAdmin& film) {
+    out << (string) film;
+    return out;
 }

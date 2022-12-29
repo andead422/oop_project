@@ -2,7 +2,7 @@
 
 int User::userCount = 0;
 
-User& User::setIdU(int id) {
+User& User::setIdUser(int id) {
     if (id > userCount) {
         idUser = id;
     }

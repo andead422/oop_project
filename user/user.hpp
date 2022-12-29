@@ -14,8 +14,8 @@ public:
     User(const User&) = delete;
     ~User() = default;
 
-    int getIdU() const { return idUser; }
-    User& setIdU(int);
+    int getIdUser() const { return idUser; }
+    User& setIdUser(int);
 };
 
 #endif

@@ -9,7 +9,14 @@ class Date {
     int year;
 
 public:
-    Date();
+    Date() {
+        time_t t = time(0);
+        tm* now = localtime(&t);
+
+        day = now->tm_mday;
+        month = now->tm_mon + 1;
+        year = now->tm_year + 1900;
+    }
     Date(int day, int month, int year): day(day), month(month), year(year) {}
     Date(Date&) = default;
     //delat proverki?
@@ -23,6 +30,27 @@ public:
     Date& setMonth(int month) { this->month = month; return *this; }
     Date& setYear(int year) { this->year = year; return *this; }
 
+    Date& operator ++();
+    Date& operator --();
+
+    Date operator ++(int);
+    Date operator --(int);
+
+    int leap_years();
+
+    bool operator == (const Date& other);
+    
+    bool operator != (const Date& another);
+
+    bool operator > (const Date& other);
+
+    bool operator < (const Date& other);
+
+    Date operator + (Date temp) ;
+
+    friend std::istream& operator >> (std::istream& in, Date& date);
+    friend std::ostream& operator << (std::ostream& out, const Date& date);
+    
     void printDate() const { cout << day << "." << month << "." << year; }
 };
 

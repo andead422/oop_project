@@ -6,6 +6,7 @@
 using std::string;
 
 class Film {
+protected:
     int idFilm;
 
 public:
@@ -13,7 +14,7 @@ public:
     Film(int idFilm) : idFilm(idFilm) {};
     Film(const Film&) = default;
     Film(Film&&) = default;
-    ~Film() = default;
+    virtual ~Film() = default;
 
     int getId() const { return idFilm; }
     Film& setId(int idFilm) { this->idFilm = idFilm; return *this; }
@@ -22,9 +23,6 @@ public:
 
 protected:
     // arr getMovieData(int idFilm);
-
-    //в общем если хранить обьекты дочерних классов в указателе на батькивськый(меньше памяти) то смысл имеет  
-    virtual void rateFilm(int) = 0;
 };
 
 #endif
