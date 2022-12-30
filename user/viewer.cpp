@@ -46,9 +46,7 @@ FilmViewer Viewer::generateNewFilm() {
     int idFilm;
 
     while(1) {
-        idFilm = rand() % (FilmViewer::getFilmsNumber()) + 1;
-        FilmViewer temp(idFilm);
-
+        FilmViewer temp = database->getRandFilm();
         if(checkGenres(temp)) return temp;
     }
 }

@@ -8,7 +8,6 @@
 class FilmViewer: public Film {
     double rate = 0;
     vector<int> filmGenres;
-    static int FilmsNumber;
     
 public:
     FilmViewer() = default;
@@ -22,7 +21,6 @@ public:
     vector<int> getFilmGenres() const { return filmGenres; }
     int getFilmGenre(int ii) const { return filmGenres[ii]; }
     int getFilmGenresSize() const { return filmGenres.size(); }
-    static int getFilmsNumber() { return FilmsNumber; }
 
     FilmViewer& setfilmGenres( const vector<int>& filmGenres ) { this->filmGenres = filmGenres; return *this; }
     FilmViewer& setfilmGenre( const int filmGenre ) { addToSet(filmGenres, filmGenre); return *this; }
