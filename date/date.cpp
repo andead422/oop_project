@@ -66,20 +66,14 @@ int Date::leap_years() {
 
 }
 
-Date Date::operator + (Date temp)  {
-    /*
-    Date tmp;
-    tmp.day = abs(this->day - temp.day);
-    tmp.month = abs(this->month - temp.month);
-    tmp.year = (this->year - temp.year);
-    return tmp;
-    */
-   Date tmp;
-   int overall_days_temp = 2000*365 + 31 + 1 + temp.leap_years();
-
-   tmp.day = overall_days_temp;
-   
-   return tmp;
+Date Date::operator + (const Date& temp) const {    
+    Date output(*this);
+    output.day += temp.day;
+    if (output.day > 30) {++ output.month; output.day - 30;}
+    output.month+= temp.month;
+    if (output.month > 12) {++ output.year; this->month - 12;}
+    output.year += temp.year;
+    return output;
 }
 
 bool Date::operator == (const Date& other) {
@@ -105,3 +99,4 @@ bool Date::operator > (const Date& another) {
 bool Date::operator < (const Date& another) {
     return !(*this > another);
 }
+

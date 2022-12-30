@@ -6,6 +6,9 @@
 #include <string>
 #include <map>
 #include <random>
+#include <python3.10/Python.h>
+#include <cctype>
+#include <sstream>
 
 #include "db/database.hpp"
 
@@ -21,6 +24,8 @@ using std::endl;
 using std::rand;
 using std::max;
 using std::to_string;
+using std::toupper;
+using std::istringstream;
 
 template<typename T>
 int findInVector(const vector<T>& vec, const T& element) {
@@ -50,7 +55,9 @@ string to_string(const vector<T>& vec, const string& delim = ", ") {
       output += to_string(i) + delim;
     }
     
-    output.erase(output.size() - delim.size(), delim.size());
+    if (output.size() != 0) {
+        output.erase(output.size() - delim.size(), delim.size());
+    }
 
     return output;
 }

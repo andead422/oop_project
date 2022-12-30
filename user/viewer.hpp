@@ -10,24 +10,26 @@ class Viewer: public User {
     vector<FilmViewer> ratedFilms;
 
     //vector[genre]<pair<count, 0 rate>>
-    vector<pair<int, int>> Genres = vector(database->getGenresNumber(), pair(0,0));
+    vector<pair<int, int>> genres = vector(database->getGenresNumber(), pair(0,0));
 
 public:
     Viewer() = default;
-    Viewer(int age, char sex): age(age), sex(sex) {}   
-    Viewer(int age, char sex, vector<FilmViewer>& ratedFilms): age(age), sex(sex), ratedFilms(ratedFilms) {}
+    Viewer(int idUser) { cout << "getting info from db"; }
+    Viewer(int age, char sex): age(age), sex((char)toupper(sex)) {}   
+    Viewer(int age, char sex, vector<FilmViewer>& ratedFilms): age(age), sex((char)toupper(sex)), ratedFilms(ratedFilms) {}
     Viewer(const Viewer&) = default;
     ~Viewer() = default;
 
     int getAge() const { return age; }
     char getSex() const { return sex; }
     vector<FilmViewer> getRatedFilms() const { return ratedFilms; }
+    map<int, double> getMapRatedFilms() const;
 
     Viewer& setAge(int age) { this->age = age; return *this; }
-    Viewer& setSex(char sex) { this->sex = sex; return *this; }
+    Viewer& setSex(char sex) { this->sex = (char)toupper(sex); return *this; }
     Viewer& setRatedFilms(vector<FilmViewer>& ratedFilms) { this->ratedFilms = ratedFilms; return *this; }
     Viewer& setRatedFilm(FilmViewer& ratedFilm) { addToSet(ratedFilms, ratedFilm); return *this; }
-    vector<pair<int, int>> getGenresStats() { return Genres; }
+    vector<pair<int, int>> getGenresStats() { return genres; }
 
     void rateFilm(FilmViewer&, double);
     FilmViewer generateNewFilm();
@@ -35,10 +37,13 @@ public:
 
     operator string()const;
     friend std::ostream& operator << (std::ostream&, const Viewer&);
+    friend std::istream& operator >> (std::istream&, Viewer&);
+    bool checkNumberOfRecommendations() const;
+    void rateFilms();
+    bool checkSeen(FilmViewer& film) const { return findInVector(ratedFilms, film) != -1; }
 
 private:
     void incrementRatedGenres(FilmViewer&, double);
-    bool checkSeen(FilmViewer&) const;
     void printInfo() const;
 };
 

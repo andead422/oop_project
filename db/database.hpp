@@ -33,6 +33,7 @@ public:
     int getGenresNumber();
     const int getFilmsNumber();
     string getFilmName(int);
+    int getFilmYear(int);
     string getFilmDirector(int);
     vector<int> getFilmGenres(int);
     vector<string> getFilmCast(int);

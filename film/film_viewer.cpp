@@ -9,3 +9,16 @@ FilmViewer& FilmViewer::operator=(const FilmViewer& other) {
     return *this; 
 }
 
+void FilmViewer::printFilmInfoToRate() {
+    // parse image;
+    cout << database->getFilmName(idFilm) << " (" << database->getFilmYear(idFilm) << ")" << endl;
+}
+
+//наитийно она будет отличаться от той что выше
+void FilmViewer::printFilmInfoToRecommend() {
+    //parse image
+    cout << database->getFilmName(idFilm) << " (" << database->getFilmYear(idFilm) << ")" << endl;
+    
+}
+
+

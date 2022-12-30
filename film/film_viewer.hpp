@@ -24,14 +24,17 @@ public:
     int getFilmGenresSize() const { return filmGenres.size(); }
     static int getFilmsNumber() { return FilmsNumber; }
 
-    FilmViewer& setfilmGenres( vector<int> filmGenres ) { this->filmGenres = filmGenres; return *this; }
-    FilmViewer& setfilmGenre( int filmGenre ) { addToSet(filmGenres, filmGenre); return *this; }
-    FilmViewer& setFilmRate(double rate) { this->rate = rate; return *this; }
+    FilmViewer& setfilmGenres( const vector<int>& filmGenres ) { this->filmGenres = filmGenres; return *this; }
+    FilmViewer& setfilmGenre( const int filmGenre ) { addToSet(filmGenres, filmGenre); return *this; }
+    FilmViewer& setFilmRate(const double rate) { this->rate = rate; return *this; }
+
+    void printFilmInfoToRate();
+    void printFilmInfoToRecommend();
 
     bool operator == (const FilmViewer& other) const { return filmGenres == other.filmGenres && idFilm == other.idFilm && rate == other.rate; }
-    FilmViewer& operator=(const FilmViewer& other) { filmGenres = other.filmGenres; return *this; }
+    FilmViewer& operator=(const FilmViewer& other);
 };
 
-string to_string(FilmViewer& film) { return to_string(film.getId()) + ": " + to_string(film.getFilmRate()); }
+inline string to_string(const FilmViewer& film) { return to_string(film.getId()) + ": " + to_string(film.getFilmRate()); }
 
 #endif

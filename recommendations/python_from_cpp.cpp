@@ -1,19 +1,19 @@
-#include <iostream>
-#include <vector>
-#include <iterator>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <python3.10/Python.h>
-#include <map>
-#include <sstream>
+// #include <iostream>
+// #include <vector>
+// #include <iterator>
+// #include <stdlib.h>
+// #include <string.h>
+// #include <stdio.h>
+// #include <python3.10/Python.h>
+// #include <map>
+// #include <sstream>
 
-using namespace std;
+#include "python_from_cpp.hpp"
 
 //Шлях до папки де зберігається python-модуль
 const char* path_to_python = "/home/e1phant/Documents/oop_project/main_parilka";
 //Назва модулю python
-const char *python_module_name = "main_model.py";
+const char *python_module_name = "main_model";
 
 PyObject *pName = NULL, *pModule = NULL;
 PyObject *pDict = NULL, *pObjct = NULL, *pVal = NULL;
@@ -55,6 +55,7 @@ PyObject *python_init() {
     } while (0);
 
     PyErr_Print();
+    return NULL;
 }
 
 /*
@@ -126,7 +127,9 @@ vector<int> recomended_film(map<int, double> recommended){
 
     if (!python_init()) {
         puts("python_init error");
-        return;
+
+        vector<int> empty;
+        return empty;
     }
 
     string ans = python_func_get_str(cstr);

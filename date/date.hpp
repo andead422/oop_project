@@ -18,7 +18,7 @@ public:
         year = now->tm_year + 1900;
     }
     Date(int day, int month, int year): day(day), month(month), year(year) {}
-    Date(Date&) = default;
+    Date(const Date&) = default;
     //delat proverki?
     ~Date() = default;
 
@@ -46,7 +46,7 @@ public:
 
     bool operator < (const Date& other);
 
-    Date operator + (Date temp) ;
+    Date operator + (const Date& temp) const;
 
     friend std::istream& operator >> (std::istream& in, Date& date);
     friend std::ostream& operator << (std::ostream& out, const Date& date);
