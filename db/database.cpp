@@ -22,19 +22,17 @@ DBConnect* DBConnect::GetInstance() {
     return connection;
 }
 
-vector<int> DBConnect::getFilmGenres(int id) {
-    // MYSQL_RES* res;
-    // MYSQL_ROW row;
-    // vector<int> output;
-    // mysql_query(conn, ("SELECT id_genre FROM film_genre WHERE id_film = " + to_string(id)).c_str());
-    // if (res = mysql_store_result(conn)) {
-    //     while(row = mysql_fetch_row(res)) {
-    //         cout << row[0] << endl;
-    //         output.push_back((int)(*row[0] - 48));
-    //     }
-    // }
-    // return output;
-    return {1, 2, 6};
+vector<char*> DBConnect::getFilmGenres(int id) {
+    MYSQL_RES* res;
+    MYSQL_ROW row;
+    vector<char*> output;
+    mysql_query(conn, ("SELECT id_genre FROM film_genre WHERE id_film = " + to_string(id)).c_str());
+    if (res = mysql_store_result(conn)) {
+        while(row = mysql_fetch_row(res)) {
+            output.push_back(row[0]);
+        }
+    }
+    return output;
 }
 
 int DBConnect::getGenresNumber() {
