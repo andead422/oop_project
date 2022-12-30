@@ -5,7 +5,7 @@
 #include "user/viewer.hpp"
 #include "recommendations/python_from_cpp.hpp"
 
-DBConnect* database = DBConnect::GetInstance();
+DBConnect* database = DBConnect::getInstance();
 
 void dateInstance();
 void rateFilms(Viewer&);

@@ -15,7 +15,7 @@ DBConnect::DBConnect() {
 
 DBConnect* DBConnect::connection = nullptr;
 
-DBConnect* DBConnect::GetInstance() {
+DBConnect* DBConnect::getInstance() {
     if(connection == nullptr) {
         connection = new DBConnect();
     }
@@ -36,30 +36,70 @@ vector<int> DBConnect::getFilmGenres(int id) {
 }
 
 int DBConnect::getGenresNumber() {
-    return 19;
+    MYSQL_RES* res;
+    int output;
+    mysql_query(conn, "SELECT * FROM genre");
+    if (res = mysql_store_result(conn)) {
+        output = mysql_num_rows(res);
+        mysql_free_result(res);
+        return output;
+    }
 }
 
 const int DBConnect::getFilmsNumber() {
-    return 100500;
+    MYSQL_RES* res;
+    int output;
+    mysql_query(conn, "SELECT * FROM film");
+    if (res = mysql_store_result(conn)) {
+        output = mysql_num_rows(res);
+        mysql_free_result(res);
+        return output;
+    }
 }
 
-string DBConnect::getFilmName(int) {
-    return "LA LA LAND";
+int DBConnect::getRandomFilm() {
+    MYSQL_RES* res;
+    MYSQL_ROW row;
+    mysql_query(conn, "SELECT id_film FROM film ORDER BY RAND() LIMIT 1");
+    if (res = mysql_store_result(conn)) {
+        row = mysql_fetch_row(res);
+        mysql_free_result(res);
+        return stoi(row[0]);
+    }
 }
 
-int DBConnect::getFilmYear(int) {
-    return 2019;
+string DBConnect::getFilmTitleYear(int id) {
+    MYSQL_RES* res;
+    MYSQL_ROW row;
+    mysql_query(conn, ("SELECT title, release_year FROM film WHERE id_film = " + to_string(id)).c_str());
+    if (res = mysql_store_result(conn)) {
+        row = mysql_fetch_row(res);
+        mysql_free_result(res);
+        return row[0] + to_string(" (") + row[1] + to_string(")");
+    }
 }
 
-string DBConnect::getFilmDirector(int) {
-    return "Damien Chazelle";
+string DBConnect::getFilmDirector(int id) {
+    MYSQL_RES* res;
+    MYSQL_ROW row;
+    mysql_query(conn, ("SELECT d.full_name FROM director d WHERE d.id_dir = (SELECT fd.id_dir FROM film_dir fd WHERE fd.id_film = " + to_string(id) + ")").c_str());
+    if (res = mysql_store_result(conn)) {
+        row = mysql_fetch_row(res);
+        mysql_free_result(res);
+        return row[0];
+    }
 }
 
-vector<string> DBConnect::getFilmCast(int) {
-    return {"Emily Jean", "Ryan Thomas Gosling"};
+vector<string> DBConnect::getFilmCast(int id) {
+    MYSQL_RES* res;
+    MYSQL_ROW row;
+    vector<string> output;
+    mysql_query(conn, ("SELECT a.full_name FROM actor a WHERE a.id_act IN (SELECT fa.id_act FROM film_act fa WHERE fa.id_film = " + to_string(id) + ")").c_str());
+    if (res = mysql_store_result(conn)) {
+        while(row = mysql_fetch_row(res)) {
+            output.push_back(row[0]);
+        }
+        mysql_free_result(res);
+        return output;
+    }
 }
-
-FilmViewer DBConnect::getRandFilm() {
-    return FilmViewer(100);
-}
-//parilka

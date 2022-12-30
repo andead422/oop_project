@@ -15,6 +15,7 @@ using std::endl;
 using std::vector;
 using std::string;
 using std::to_string;
+using std::stoi;
 
 class DBConnect
 {
@@ -29,12 +30,12 @@ public:
     DBConnect(DBConnect &) = delete;
     void operator=(const DBConnect &) = delete;
 
-    static DBConnect* GetInstance();
+    static DBConnect* getInstance();
 
     int getGenresNumber();
+    int getRandomFilm();
     const int getFilmsNumber();
-    string getFilmName(int);
-    int getFilmYear(int);
+    string getFilmTitleYear(int);
     string getFilmDirector(int);
     vector<int> getFilmGenres(int);
     vector<string> getFilmCast(int);
