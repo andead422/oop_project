@@ -46,7 +46,7 @@ FilmViewer Viewer::generateNewFilm() {
     int idFilm;
 
     while(1) {
-        idFilm = rand() % (FilmViewer::getFilmsNumber() + 1);
+        idFilm = rand() % (FilmViewer::getFilmsNumber()) + 1;
         FilmViewer temp(idFilm);
 
         if(checkGenres(temp)) return temp;
@@ -121,7 +121,7 @@ void Viewer::rateFilms() {
 
 map<int, double> Viewer::getMapRatedFilms() const {
     map<int, double> output;
-
+    
     for(int ii = 0; ii < ratedFilms.size(); ++ii){
         output[ratedFilms[ii].getId()] = ratedFilms[ii].getFilmRate();
     }

@@ -1,17 +1,7 @@
-// #include <iostream>
-// #include <vector>
-// #include <iterator>
-// #include <stdlib.h>
-// #include <string.h>
-// #include <stdio.h>
-// #include <python3.10/Python.h>
-// #include <map>
-// #include <sstream>
-
 #include "python_from_cpp.hpp"
 
 //Шлях до папки де зберігається python-модуль
-const char* path_to_python = "/home/e1phant/Documents/oop_project/main_parilka";
+const char* path_to_python = "/home/e1phant/Documents/oop_project/main_parilka/recommendations";
 //Назва модулю python
 const char *python_module_name = "main_model";
 
