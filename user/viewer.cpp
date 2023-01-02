@@ -106,8 +106,8 @@ void Viewer::rateFilms() {
         FilmViewer filmViewer = generateNewFilm();
         filmViewer.printFilmInfoToRate();
 
-        int rate;
-        cout << "Rate from 0 to 5 with step 0,5: ";
+        double rate;
+        cout << "Rate from 0 to 5 with step 0.5: ";
         cin >> rate;
 
         rateFilm(filmViewer, rate);

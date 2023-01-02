@@ -1,22 +1,30 @@
 import numpy as np
 import pandas as pd
 import ast
+import sys
+import os
 from pymysql import connect
 
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.metrics.pairwise import linear_kernel, cosine_similarity
 
+absolute_path = os.path.dirname(__file__)
+relative_path = "../secrets"
+full_path = os.path.join(absolute_path, relative_path)
+sys.path.insert(1, full_path)
+
 import secret
 #Не забути завантажити собі через "pip install <package_name>" всі бібліотеки
 USER_LOGIN = secret.getuser()
 USER_PASSWD = secret.getpass()
+DB_NAME = secret.getdb()
 QUERY = secret.getquery()
 
 #Підключення до бд
 data_base = connect(host = 'localhost',
                     user = USER_LOGIN,
                     passwd = USER_PASSWD,
-                    database = 'oop_project')
+                    database = DB_NAME)
 cur = data_base.cursor()
 query = QUERY
 cur.execute(query)

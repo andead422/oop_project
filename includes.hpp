@@ -11,6 +11,7 @@
 #include <sstream>
 
 #include "db/database.hpp"
+#include "secrets/secret.hpp"
 
 extern DBConnect* database;
 

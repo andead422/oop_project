@@ -4,8 +4,16 @@ import re
 import copy
 import tmdbsimple as tmdb
 import time
+import sys
+import os
 from fuzzywuzzy import fuzz
-import secret/secret
+
+absolute_path = os.path.dirname(__file__)
+relative_path = "secrets"
+full_path = os.path.join(absolute_path, relative_path)
+sys.path.insert(1, full_path)
+
+import secret
 
 # запустить эту команду до запуска кода
 # LOAD DATA LOCAL INFILE "{path}" INTO TABLE rating FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES (id_user, id_film_source, rating, @timestamp);
