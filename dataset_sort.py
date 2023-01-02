@@ -1,11 +1,11 @@
 import csv
 import pymysql
 import re
-import secret
 import copy
 import tmdbsimple as tmdb
 import time
 from fuzzywuzzy import fuzz
+import secret/secret
 
 # запустить эту команду до запуска кода
 # LOAD DATA LOCAL INFILE "{path}" INTO TABLE rating FIELDS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES (id_user, id_film_source, rating, @timestamp);
@@ -380,7 +380,7 @@ def add_tmdb_rate():
 # sort_tag()
 # sort_time = time.time()
 # add_tag()
-add_tmdb_rate()
+# add_tmdb_rate()
 
 conn.commit()
 cur.close()
