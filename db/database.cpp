@@ -13,10 +13,10 @@ DBConnect::DBConnect() {
     }
 }
 
-DBConnect* DBConnect::connection = nullptr;
+DBConnect* DBConnect::connection = NULL;
 
 DBConnect* DBConnect::getInstance() {
-    if(connection == nullptr) {
+    if(connection == NULL) {
         connection = new DBConnect();
     }
     return connection;
@@ -75,7 +75,7 @@ string DBConnect::getFilmTitleYear(int id) {
     if (res = mysql_store_result(conn)) {
         row = mysql_fetch_row(res);
         mysql_free_result(res);
-        return row[0] + to_string(" (") + row[1] + to_string(")");
+        return row[0] + (char*)" (" + row[1] + (char*)")";
     }
 }
 

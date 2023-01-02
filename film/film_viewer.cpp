@@ -1,7 +1,5 @@
 #include "film_viewer.hpp"
 
-int FilmViewer::FilmsNumber(database->getFilmsNumber());
-
 FilmViewer& FilmViewer::operator=(const FilmViewer& other) { 
     filmGenres = other.filmGenres; 
     rate = other.rate; 
@@ -9,16 +7,4 @@ FilmViewer& FilmViewer::operator=(const FilmViewer& other) {
     return *this; 
 }
 
-void FilmViewer::printFilmInfoToRate() {
-    // parse image;
-    cout << database->getFilmName(idFilm) << " (" << database->getFilmYear(idFilm) << ")" << endl;
-}
-
-//наитийно она будет отличаться от той что выше
-void FilmViewer::printFilmInfoToRecommend() {
-    //parse image
-    cout << database->getFilmName(idFilm) << " (" << database->getFilmYear(idFilm) << ")" << endl;
-    
-}
-
-
+inline string to_string(const FilmViewer& film) { return to_string(film.getId()) + ": " + to_string(film.getFilmRate()); }

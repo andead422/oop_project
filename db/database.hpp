@@ -7,7 +7,6 @@
 #include <mysql/mysql.h>
 
 #include "secret.hpp"
-#include "../film/film_viewer.hpp"
 
 using std::cout;
 using std::cin;
@@ -39,7 +38,6 @@ public:
     string getFilmDirector(int);
     vector<int> getFilmGenres(int);
     vector<string> getFilmCast(int);
-    FilmViewer getRandFilm();
 };
 
 
