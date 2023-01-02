@@ -1,4 +1,5 @@
 #include "viewer.hpp"
+#define LIMIT 1
 
 // //map<genre, pair<count, 0 rate>>
 // vector<pair<int, int>> Viewer::genres(database.getGenresNumber(), {0,0});
@@ -54,7 +55,7 @@ FilmViewer Viewer::generateNewFilm() {
 
 bool Viewer::checkGenres(FilmViewer& film) {
     for (int ii = 0; ii < film.getFilmGenresSize(); ++ii) {
-        if (genres[film.getFilmGenre(ii) - 1].first < 1 && genres[film.getFilmGenre(ii) - 1].second < 1) {
+        if (genres[film.getFilmGenre(ii) - 1].first < LIMIT && genres[film.getFilmGenre(ii) - 1].second < LIMIT) {
             return true;
         }
     }
@@ -90,7 +91,7 @@ std::istream& operator >> (std::istream& in, Viewer& viewer) {
 
 bool Viewer::checkNumberOfRecommendations() const {
     for (int ii = 0; ii < genres.size(); ++ii) {
-        if (genres[ii].first < 1 && genres[ii].second < 1) {
+        if (genres[ii].first < LIMIT && genres[ii].second < LIMIT) {
             return true;
         }
     }

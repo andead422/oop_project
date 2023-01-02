@@ -31,8 +31,9 @@ vector<int> DBConnect::getFilmGenres(int id) {
         while(row = mysql_fetch_row(res)) {
             output.push_back(stoi(row[0]));
         }
+        return output;
     }
-    return output;
+    return {};
 }
 
 int DBConnect::getGenresNumber() {
@@ -44,6 +45,7 @@ int DBConnect::getGenresNumber() {
         mysql_free_result(res);
         return output;
     }
+    return 0;
 }
 
 const int DBConnect::getFilmsNumber() {
@@ -55,6 +57,7 @@ const int DBConnect::getFilmsNumber() {
         mysql_free_result(res);
         return output;
     }
+    return 0;
 }
 
 int DBConnect::getRandomFilm() {
@@ -66,6 +69,7 @@ int DBConnect::getRandomFilm() {
         mysql_free_result(res);
         return stoi(row[0]);
     }
+    return 0;
 }
 
 string DBConnect::getFilmTitleYear(int id) {
@@ -77,6 +81,7 @@ string DBConnect::getFilmTitleYear(int id) {
         mysql_free_result(res);
         return row[0] + string(" (") + row[1] + string(")");
     }
+    return "";
 }
 
 string DBConnect::getFilmDirector(int id) {
@@ -88,6 +93,7 @@ string DBConnect::getFilmDirector(int id) {
         mysql_free_result(res);
         return row[0];
     }
+    return "";
 }
 
 vector<string> DBConnect::getFilmCast(int id) {
@@ -102,4 +108,5 @@ vector<string> DBConnect::getFilmCast(int id) {
         mysql_free_result(res);
         return output;
     }
+    return {};
 }
