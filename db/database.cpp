@@ -29,7 +29,7 @@ vector<int> DBConnect::getFilmGenres(int id) {
     mysql_query(conn, ("SELECT id_genre FROM film_genre WHERE id_film = " + to_string(id)).c_str());
     if (res = mysql_store_result(conn)) {
         while(row = mysql_fetch_row(res)) {
-            output.push_back((int)row[0]);
+            output.push_back(atoi(row[0]));
         }
     }
     return output;
@@ -75,7 +75,7 @@ string DBConnect::getFilmTitleYear(int id) {
     if (res = mysql_store_result(conn)) {
         row = mysql_fetch_row(res);
         mysql_free_result(res);
-        return row[0] + (char*)" (" + row[1] + (char*)")";
+        return row[0] + string(" (") + row[1] + string(")");
     }
 }
 

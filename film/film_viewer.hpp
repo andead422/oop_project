@@ -33,6 +33,6 @@ public:
     FilmViewer& operator=(const FilmViewer& other);
 };
 
-inline string to_string(const FilmViewer& film);
+inline string to_string(const FilmViewer& film) { return to_string(film.getId()) + ": " + to_string(film.getFilmRate()); }
 
 #endif

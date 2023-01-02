@@ -7,4 +7,16 @@ FilmViewer& FilmViewer::operator=(const FilmViewer& other) {
     return *this; 
 }
 
-inline string to_string(const FilmViewer& film) { return to_string(film.getId()) + ": " + to_string(film.getFilmRate()); }
+
+void FilmViewer::printFilmInfoToRate() {
+    // parse image;
+    cout << database->getFilmTitleYear(idFilm) << endl;
+}
+
+//наитийно она будет отличаться от той что выше
+void FilmViewer::printFilmInfoToRecommend() {
+    //parse image
+    cout << database->getFilmTitleYear(idFilm) << endl;    
+}
+
+
