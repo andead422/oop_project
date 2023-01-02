@@ -6,7 +6,7 @@
 #include <string>
 #include <mysql/mysql.h>
 
-#include "secret.hpp"
+#include "../secrets/secret.hpp"
 
 using std::cout;
 using std::cin;

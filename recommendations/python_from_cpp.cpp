@@ -1,7 +1,7 @@
 #include "python_from_cpp.hpp"
 
 //Шлях до папки де зберігається python-модуль
-const char* path_to_python = "/home/e1phant/Documents/oop_project/main_parilka/recommendations";
+const char* path_to_python = getPATH();
 //Назва модулю python
 const char *python_module_name = "main_model";
 
