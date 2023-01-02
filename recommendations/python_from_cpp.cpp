@@ -11,9 +11,9 @@ PyObject *sys = NULL;
 PyObject *sys_path = NULL;
 PyObject *folder_path = NULL;
 
-//Завантаження інтерпритатора python и модуля .py в него.
+//Завантаження інтерпретатора python и модуля .py в него.
 PyObject *python_init() {
-    // Ініціалізування інтерпритатора
+    // Ініціалізування інтерпретатора
     Py_Initialize();
 
     do {
@@ -49,7 +49,7 @@ PyObject *python_init() {
 }
 
 /*
- * звільнення ресурсів інтерпритатора python
+ * звільнення ресурсів інтерпретатора python
  */
 void python_clear() {
     // Повернути ресурси системі
@@ -61,7 +61,7 @@ void python_clear() {
     Py_XDECREF(sys_path);
     Py_XDECREF(sys);
     
-    // Вивантаження інтерпритатора Python
+    // Вивантаження інтерпретатора Python
     Py_Finalize();
 }
 
@@ -123,9 +123,7 @@ vector<int> recomended_film(map<int, double> recommended){
     }
 
     string ans = python_func_get_str(cstr);
-    cout << ans << endl;
     ans = ans.substr(1, ans.length() - 3);
-    cout << ans << endl;
     vector <int> int_ans = split(ans, ' ');
     python_clear();
     return int_ans;

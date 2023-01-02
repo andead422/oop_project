@@ -54,7 +54,7 @@ FilmViewer Viewer::generateNewFilm() {
 
 bool Viewer::checkGenres(FilmViewer& film) {
     for (int ii = 0; ii < film.getFilmGenresSize(); ++ii) {
-        if (genres[film.getFilmGenre(ii) - 1].first < 2 && genres[film.getFilmGenre(ii) - 1].second < 2) {
+        if (genres[film.getFilmGenre(ii) - 1].first < 1 && genres[film.getFilmGenre(ii) - 1].second < 1) {
             return true;
         }
     }
@@ -90,7 +90,7 @@ std::istream& operator >> (std::istream& in, Viewer& viewer) {
 
 bool Viewer::checkNumberOfRecommendations() const {
     for (int ii = 0; ii < genres.size(); ++ii) {
-        if (genres[ii].first < 2 && genres[ii].second < 2) {
+        if (genres[ii].first < 1 && genres[ii].second < 1) {
             return true;
         }
     }
@@ -112,8 +112,8 @@ void Viewer::rateFilms() {
 
         rateFilm(filmViewer, rate);
         cout << to_string(filmViewer) << endl << endl;
-    //} while(checkNumberOfRecommendations());
-    } while(++ii < 2);
+    } while(checkNumberOfRecommendations());
+    //} while(++ii < 2);
 }
 
 

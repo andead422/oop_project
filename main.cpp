@@ -51,6 +51,7 @@ int main()
             viewer.rateFilms();
             
             vector<int> recomm = recomended_film(viewer.getMapRatedFilms());
+            
             cout << "rec size: " << recomm.size() << endl;
 
             for (int ii : recomm) {
