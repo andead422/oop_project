@@ -1,3 +1,6 @@
+#  template for secret.py file, which should be located in this directory
+
+
 def getuser(): # sql username
     return ''
 
