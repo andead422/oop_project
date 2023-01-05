@@ -19,11 +19,11 @@ using std::stoi;
 
 class DBConnect: public Singleton<DBConnect> { // наслідування від шаблону
 protected:
-    DBConnect(); // конструктор захищений, аби його неможливо було викликати ззовні класу
+    // DBConnect(); // конструктор захищений, аби його неможливо було викликати ззовні класу
 
     MYSQL* conn = NULL;
 public:
-
+    DBConnect();
     int getGenresNumber();
     int getRandomFilm();
     const int getFilmsNumber();
