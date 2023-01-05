@@ -15,10 +15,10 @@ sys.path.insert(1, full_path)
 
 import secret
 #Не забути завантажити собі через "pip install <package_name>" всі бібліотеки
-USER_LOGIN = secret.getuser()
-USER_PASSWD = secret.getpass()
-DB_NAME = secret.getdb()
-QUERY = secret.getquery()
+USER_LOGIN = secret.getUser()
+USER_PASSWD = secret.getPass()
+DB_NAME = secret.getDB()
+QUERY = secret.getQuery()
 
 #Підключення до бд
 data_base = connect(host = 'localhost',
@@ -26,9 +26,9 @@ data_base = connect(host = 'localhost',
                     passwd = USER_PASSWD,
                     database = DB_NAME)
 cur = data_base.cursor()
-query = QUERY
-cur.execute(query)
-df_film = pd.read_sql(query, data_base)
+# query = QUERY
+cur.execute(QUERY)
+df_film = pd.read_sql(QUERY, data_base)
 df_film['id_film'] = df_film['id_film'].astype(int)
 
 

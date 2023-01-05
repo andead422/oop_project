@@ -7,6 +7,7 @@
 #include <mysql/mysql.h>
 
 #include "../secrets/secret.hpp"
+#include "../singleton/singleton.hpp"
 
 using std::cout;
 using std::cin;
@@ -16,20 +17,12 @@ using std::string;
 using std::to_string;
 using std::stoi;
 
-class DBConnect
-{
+class DBConnect: public Singleton<DBConnect> { // наслідування від шаблону
 protected:
-    DBConnect();
-
-    static DBConnect* connection;
+    DBConnect(); // конструктор захищений, аби його неможливо було викликати ззовні класу
 
     MYSQL* conn = NULL;
-
 public:
-    DBConnect(DBConnect &) = delete;
-    void operator=(const DBConnect &) = delete;
-
-    static DBConnect* getInstance();
 
     int getGenresNumber();
     int getRandomFilm();

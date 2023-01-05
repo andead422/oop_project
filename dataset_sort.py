@@ -23,9 +23,9 @@ import secret
 
 start_time = time.time()
 
-conn = pymysql.connect(user=secret.getuser(), password=secret.getpass(), database=secret.getdb())
+conn = pymysql.connect(user=secret.getUser(), password=secret.getPass(), database=secret.getDB())
 cur = conn.cursor()
-tmdb.API_KEY = secret.getapikey()
+tmdb.API_KEY = secret.getAPIKey()
 
 word_tags = {}
 people = set()
