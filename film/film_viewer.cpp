@@ -7,13 +7,13 @@ FilmViewer& FilmViewer::operator=(const FilmViewer& other) {
     return *this; 
 }
 
-
+//виводить інформацію необхідну для оцінки
 void FilmViewer::printFilmInfoToRate() {
     // parse image;
     cout << database->getFilmTitleYear(idFilm) << endl;
 }
 
-//наитийно она будет отличаться от той что выше
+//виводить фільм як рекомендацію
 void FilmViewer::printFilmInfoToRecommend() {
     //parse image
     cout << database->getFilmTitleYear(idFilm) << endl;    

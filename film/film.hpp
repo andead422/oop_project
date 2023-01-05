@@ -14,7 +14,7 @@ public:
     Film(int idFilm) : idFilm(idFilm) {};
     Film(const Film&) = default;
     Film(Film&&) = default;
-    virtual ~Film() = default;
+    ~Film() = default;
 
     int getId() const { return idFilm; }
     Film& setId(int idFilm) { this->idFilm = idFilm; return *this; }

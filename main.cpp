@@ -8,7 +8,7 @@
 DBConnect* database = DBConnect::getInstance();
 
 void dateInstance();
-void rateFilms(Viewer&);
+void recommendationsInstance();
 
 int main()
 {
@@ -24,51 +24,16 @@ int main()
             dateInstance();
         }
         else if (choose == 2) {
-            //-----------------------------------------------------------------------------------------FilmViewer
-            // FilmViewer fv1, fv3(fv1);
-
-            // cout << "FilmViewer():" << "fv1" << endl;
-            // cout << to_string(fv1) << endl;
-
-            // cout << "FilmViewer(int id):" << "fv2" << endl;
-            // int id;
-            // cout << "id: ";
-            // cin >> id;
-            // FilmViewer fv2(id);
-            // cout << to_string(fv2) << endl;
-
-            // cout << "FilmViewer(FilmViewer&):" << "fv3" << endl;
-            // cout << to_string(fv3) << endl;
-
-            // a = fv1 == fv2;
-            // cout << "date1 == date2: " << a << endl;
-
-            cout << "Create new viewer:" << endl;
-            Viewer viewer;
-            cin >> viewer;
-            cout << endl << "Created viewer: " << viewer << endl;
-
-            viewer.rateFilms();
-            
-            vector<int> recomm = recomended_film(viewer.getMapRatedFilms());
-            
-            cout << "rec size: " << recomm.size() << endl;
-
-            for (int ii : recomm) {
-                FilmViewer temp(ii);
-
-                if(!viewer.checkSeen(temp)) {
-                    temp.printFilmInfoToRecommend();
-                }
-            }
+            recommendationsInstance();
         } 
         else { 
             cout << "Invalid input!";
         }
 
     } while(choose != 1 && choose != 2);
-}
 
+    return 0;
+}
 
 
 void dateInstance() {
@@ -101,12 +66,12 @@ void dateInstance() {
             bool b = date0 > date1;
             cout << "date0 > date1: " << b << endl;
 
-            cout << "++date0: ";
-            (++date0).printDate();
+            cout << "++date1: ";
+            (++date1).printDate();
             cout << endl;
 
-            cout << "date0++: ";
-            (date0++).printDate();
+            cout << "date2++: ";
+            (date2++).printDate();
             cout << endl;
 
             b = date0 != date1;
@@ -114,9 +79,36 @@ void dateInstance() {
 
             a = date0 < date1;
             cout << "date0 < date1: " << a << endl;
-            /*
-            date1 = date2 + date0;
-            date1.printDate();
+
             cout << endl;
-            */
+            cout << "date2: ";
+            date2.printDate();
+            cout << " date0: ";
+            date0.printDate();
+            cout << endl;
+
+            cout << "date2 + date0: ";
+            (date2 + date0).printDate();
+            cout << endl;
+}
+
+void recommendationsInstance() {
+            cout << "Create new viewer:" << endl;
+            Viewer viewer;
+            cin >> viewer;
+            cout << endl << "Created viewer: " << viewer << endl;
+
+            viewer.rateFilms();
+            
+            vector<int> recomm = recomended_film(viewer.getMapRatedFilms());
+            
+            cout << "rec size: " << recomm.size() << endl;
+
+            for (int ii : recomm) {
+                FilmViewer temp(ii);
+
+                if(!viewer.checkSeen(temp)) {
+                    temp.printFilmInfoToRecommend();
+                }
+            }
 }

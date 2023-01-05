@@ -25,6 +25,10 @@ FilmAdmin::operator string() const {
     return output;
 }
 
+void FilmAdmin::printInfo() const {
+    cout << (string)*this;
+}
+
 std::ostream& operator << (std::ostream& out, const FilmAdmin& film) {
     out << (string) film;
     return out;

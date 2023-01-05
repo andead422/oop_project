@@ -39,7 +39,6 @@ public:
     Film& setActor(string actor) { addToSet(cast, actor); return *this; }
 
     void printInfo() const;
-
     operator string() const;
     friend std::ostream& operator << (std::ostream&, const FilmAdmin&);
 };

@@ -8,15 +8,9 @@ class Date {
     int month;
     int year;
 
+    static int days[];
 public:
-    Date() {
-        time_t t = time(0);
-        tm* now = localtime(&t);
-
-        day = now->tm_mday;
-        month = now->tm_mon + 1;
-        year = now->tm_year + 1900;
-    }
+    Date();
     Date(int day, int month, int year): day(day), month(month), year(year) {}
     Date(const Date&) = default;
     //delat proverki?
@@ -36,22 +30,29 @@ public:
     Date operator ++(int);
     Date operator --(int);
 
-    int leap_years();
-
-    bool operator == (const Date& other);
+    Date operator + (const Date&) const;
     
-    bool operator != (const Date& another);
+    bool operator == (const Date& other) const { return this->day == other.day && this->month == other.month && this->year == other.year; }
+    bool operator != (const Date& another) const { return !(*this == another); }
 
-    bool operator > (const Date& other);
+    //простіше порівнюівати кількості днів
+    bool operator > (const Date& another) const { return numDays() > another.numDays(); }
+    bool operator < (const Date& another) const { return !(*this > another); }
 
-    bool operator < (const Date& other);
-
-    Date operator + (const Date& temp) const;
-
-    friend std::istream& operator >> (std::istream& in, Date& date);
-    friend std::ostream& operator << (std::ostream& out, const Date& date);
+    friend std::istream& operator >> (std::istream&, Date&);
+    friend std::ostream& operator << (std::ostream&, const Date&);
     
     void printDate() const { cout << day << "." << month << "." << year; }
+
+private:
+    //рахує кількість днів
+    int numDays() const { return day + culcDaysInMonthsNum() + year * 365; }
+    int culcDaysInMonthsNum() const;
+
+    
+    int mod12(int) const;
+    // Date numDaysToDate(int) const;
+    // int numDaysToMonth(int) const;
 };
 
 #endif
