@@ -1,28 +1,18 @@
 #include "database.hpp"
 
-DBConnect::DBConnect() {
-    while (conn == NULL) {
+DBConnect::DBConnect() { // конструктор класу для з'єднання з базою даних
+    while (conn == NULL) { // поки не вдасться встановити з'єднання з бд, повторюємо спроби
         conn = mysql_init(NULL);
     }
-    // Подключаемся к серверу
-    if(!mysql_real_connect(conn, "localhost", getUser().c_str(), getPass().c_str(), getDB().c_str(), 0, NULL, 0)) {
-        cout << "database connecting error" << endl;
+    if(!mysql_real_connect(conn, "localhost", getUser().c_str(), getPass().c_str(), getDB().c_str(), 0, NULL, 0)) { // логінимось у нашу бд за допомогою username та password
+        cout << "database connecting error" << endl; // якщо не вдалося, видаємо повідомлення про помилку
     }
     else {
-        mysql_set_character_set(conn, "utf8");
+        mysql_set_character_set(conn, "utf8"); // якщо все добре, перемикаємо кодування на utf8
     }
 }
 
-DBConnect* DBConnect::connection = NULL;
-
-DBConnect* DBConnect::getInstance() {
-    if(connection == NULL) {
-        connection = new DBConnect();
-    }
-    return connection;
-}
-
-vector<int> DBConnect::getFilmGenres(int id) {
+vector<int> DBConnect::getFilmGenres(int id) { // повертає масив id жанрів для деякого фільму
     MYSQL_RES* res;
     MYSQL_ROW row;
     vector<int> output;
@@ -36,7 +26,7 @@ vector<int> DBConnect::getFilmGenres(int id) {
     return {};
 }
 
-int DBConnect::getGenresNumber() {
+int DBConnect::getGenresNumber() { // повертає список жанрів та їхні id
     MYSQL_RES* res;
     int output;
     mysql_query(conn, "SELECT * FROM genre");
@@ -48,7 +38,7 @@ int DBConnect::getGenresNumber() {
     return 0;
 }
 
-const int DBConnect::getFilmsNumber() {
+const int DBConnect::getFilmsNumber() { // повертає кількість фільмів
     MYSQL_RES* res;
     int output;
     mysql_query(conn, "SELECT * FROM film");
@@ -60,7 +50,7 @@ const int DBConnect::getFilmsNumber() {
     return 0;
 }
 
-int DBConnect::getRandomFilm() {
+int DBConnect::getRandomFilm() { // повертає id випадкового фільму
     MYSQL_RES* res;
     MYSQL_ROW row;
     mysql_query(conn, "SELECT id_film FROM film ORDER BY RAND() LIMIT 1");
@@ -72,7 +62,7 @@ int DBConnect::getRandomFilm() {
     return 0;
 }
 
-string DBConnect::getFilmTitleYear(int id) {
+string DBConnect::getFilmTitleYear(int id) { // повертає назву та рік випуску деякого фільму
     MYSQL_RES* res;
     MYSQL_ROW row;
     mysql_query(conn, ("SELECT title, release_year FROM film WHERE id_film = " + to_string(id)).c_str());
@@ -84,7 +74,7 @@ string DBConnect::getFilmTitleYear(int id) {
     return "";
 }
 
-string DBConnect::getFilmDirector(int id) {
+string DBConnect::getFilmDirector(int id) { // повертає ім'я режисера фільму
     MYSQL_RES* res;
     MYSQL_ROW row;
     mysql_query(conn, ("SELECT d.full_name FROM director d WHERE d.id_dir = (SELECT fd.id_dir FROM film_dir fd WHERE fd.id_film = " + to_string(id) + ")").c_str());
@@ -96,7 +86,7 @@ string DBConnect::getFilmDirector(int id) {
     return "";
 }
 
-vector<string> DBConnect::getFilmCast(int id) {
+vector<string> DBConnect::getFilmCast(int id) { // повертає масив імен акторів
     MYSQL_RES* res;
     MYSQL_ROW row;
     vector<string> output;
