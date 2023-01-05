@@ -6,10 +6,8 @@
 
 class Administrator: User {
 public:
-    void addFilm(int) const;
-    void removeFilm(int) const;
     FilmAdmin seeFilmStats(int) const;
-    // Viewer seeViewerStats(int);
+    Viewer seeUserStats(int);
 
 private:
     bool authorization() const;
