@@ -1,10 +1,24 @@
 #include "viewer.hpp"
 #define LIMIT 1 //потрібна для налаштування кількості фільмів що оцінює viewer
 
+Viewer::Viewer(int idUser): User(idUser), age(database->getViewerAge(idUser)), sex(database->getViewerSex(idUser)) { 
+    vector<int> ratedFilms = database->getViewerRatedFilms(idUser);
+    for(int ii = 0; ii < ratedFilms.size(); ++ii) {
+        this->ratedFilms.push_back(FilmViewer(ratedFilms[ii]));
+    }
+}
+
+Viewer::Viewer(string login): User(login), age(database->getViewerAge(login)), sex(database->getViewerSex(login)) { 
+    vector<int> ratedFilms = database->getViewerRatedFilms(login);
+    for(int ii = 0; ii < ratedFilms.size(); ++ii) {
+        this->ratedFilms.push_back(FilmViewer(ratedFilms[ii]));
+    }
+}
+
 Viewer::operator string() const {
     string output;
     output += "Login: " + login + "\n"; 
-    output += "ID: " + to_string(getIdUser()) + "\n"; 
+    output += "ID: " + to_string(getIdUser(login)) + "\n"; 
     output += "Age: " + to_string(age) + "\n";
     output += "Sex: ";
     (sex == 'M') ? output += "male\n" : output += "female\n";
@@ -37,7 +51,7 @@ void Viewer::rateFilm(FilmViewer& film, double rate) {
 
     if (rate != 0) {
         film.setFilmRate(rate);
-        ratedFilms.push_back(*new FilmViewer(film)); //додаємо фільм до списку оцінених юзером
+        ratedFilms.push_back(film); //додаємо фільм до списку оцінених юзером
     }
 }
 
@@ -73,13 +87,10 @@ std::istream& operator >> (std::istream& in, Viewer& viewer) {
     while(1) {
         cout << "Enter age and sex(m/f):" << endl;
 
-        cout << "Login: ";
-        in >> viewer.login;        
-
         cout << "Age: ";
         in >> viewer.age;
 
-        cout << "Sex: ";
+        cout << "Sex (m/f): ";
         in >> viewer.sex;
         viewer.sex = (char)toupper(viewer.sex);
 
