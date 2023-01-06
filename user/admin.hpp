@@ -14,7 +14,7 @@ public:
     Administrator(const Administrator& admin) = default;
     ~Administrator() = default;
 
-    FilmAdmin seeFilmStats(int) const;
+    FilmAdmin seeFilmStats(int id) const { return FilmAdmin(id); }
     User* seeUserStats(int) const;
     User* seeUserStats(string) const;
     

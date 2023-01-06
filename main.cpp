@@ -110,7 +110,8 @@ void recommendationsInstance() {
 User* userCreation() {
     User* user;
 
-    cout << "Create new user:" << endl;
+    cout << "Create new user" << endl;
+    cout << "Enter login: ";
     string login;
     cin >> login;
 
