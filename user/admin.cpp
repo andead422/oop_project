@@ -48,7 +48,7 @@ User* Administrator::seeUserStats(string login) const {
 void Administrator::printInfo() const {
     cout << "Admin: yes" << endl;
     cout << "Login: " << login << endl;
-    cout << "ID: " << getIdUser() <<  endl;
+    cout << "ID: " << getId() <<  endl;
 }
 
 void History::printUsers() {

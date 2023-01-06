@@ -163,8 +163,6 @@ void viewerCase(Viewer* viewer) {
             temp.printFilmInfoToRecommend();
         }
     }
-
-    return viewer;
 }
 
 void adminCase(Administrator* admin) {
@@ -186,10 +184,9 @@ void adminCase(Administrator* admin) {
     }
 
     string login;
+    int id;
     switch (choose) {
     case 1:
-        int id;
-
         cout << "Enter an id: ";
         cin >> id;
 
@@ -204,8 +201,6 @@ void adminCase(Administrator* admin) {
         break;
 
     case 3:
-        int id;
-
         cout << "Enter an id: ";
         cin >> id;
 

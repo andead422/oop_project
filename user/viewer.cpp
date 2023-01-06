@@ -18,7 +18,7 @@ Viewer::Viewer(string login): User(login), age(database->getViewerAge(login)), s
 Viewer::operator string() const {
     string output;
     output += "Login: " + login + "\n"; 
-    output += "ID: " + to_string(getIdUser(login)) + "\n"; 
+    output += "ID: " + to_string(getId()) + "\n"; 
     output += "Age: " + to_string(age) + "\n";
     output += "Sex: ";
     (sex == 'M') ? output += "male\n" : output += "female\n";
