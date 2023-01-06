@@ -13,7 +13,7 @@ FilmAdmin::FilmAdmin(int idFilm): Film(idFilm) {
 //оператор приведення типу до string
 FilmAdmin::operator string() const {
     string output;
-    output += title + " (" + to_string(year) + ")\n"; 
+    output += title + "\n"; 
     output += "Rate: " + to_string(rate) + "\n";
     output += "Genres: " + to_string(genres) + "\n";
     output += "Director: " + director + "\n";

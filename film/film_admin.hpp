@@ -5,7 +5,6 @@
 
 class FilmAdmin: public Film {
     string title;
-    int year;
     double rate;
     string picture;
     string overview;
@@ -19,7 +18,6 @@ public:
     ~FilmAdmin() = default;
 
     string getTitle() const { return title; }
-    int getYear() const { return year; }
     double getRate() const { return rate; }
     string getPicture() const { return picture; }
     string getOverview() const { return overview; }
@@ -28,7 +26,6 @@ public:
     vector<string> getCast() const { return cast; }
 
     Film& setTilte(string title) { this->title = title; return *this; }
-    Film& setYear(int year) { this->year = year; return *this; }
     Film& setRate(double rate) { this->rate = rate; return *this; }
     Film& setPicture(string picture) { this->picture = picture; return *this; }
     Film& setOverview(string overview) { this->overview = overview; return *this; }
