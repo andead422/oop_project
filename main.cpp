@@ -177,11 +177,9 @@ void adminCase(Administrator* admin) {
         cout << "1. See user stats by id:" << endl;
         cout << "2. See user stats by login:" << endl;
         cout << "3. See film stats by id:" << endl;
-        cout << "4. Relogin" << endl;
-        cout << "5. Exit" << endl;
 
         cin >> choose;
-        if(choose < 6 && choose > 0) break;
+        if(choose < 4 && choose > 0) break;
 
         cout << "Invalid input!!" << endl;
     }
@@ -209,12 +207,6 @@ void adminCase(Administrator* admin) {
 
         admin->seeFilmStats(id).printInfo();
         break;
-
-    case 4:
-        recommendationsInstance();
-        break;
-    case 5:
-        exit;
     }
 
 }
