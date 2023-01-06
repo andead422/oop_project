@@ -1,10 +1,5 @@
 #include "admin.hpp"
 
-
-FilmAdmin Administrator::seeFilmStats(int id) const {
-    return FilmAdmin(id);
-}
-
 //повертає User* адже це може буди як Admin так і Viewer
 User* Administrator::seeUserStats(int id) const {
     int admin = database->checkAdmin(id);

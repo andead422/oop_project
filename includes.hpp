@@ -43,7 +43,7 @@ int findInVector(const vector<T>& vec, const T& element) {
 //перевіряє наявність елемента у векторі перед додаванням (вектор відіграє роль множини(set) )
 template<typename T>
 void addToSet(vector<T>& vec, const T& element) {
-    if(findInVector(vec, element) != -1) {
+    if(findInVector(vec, element) == -1) {
         vec.push_back(element);
     }
 }
