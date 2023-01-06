@@ -16,7 +16,7 @@ public:
     User(int idUser) : idUser(idUser), login(database->getUserLogin(idUser)){}
     User(int idUser, string login) : idUser(max(++userCount, idUser)), login(login) {}
     User(const User&) = default;
-    ~User() = default;
+    virtual ~User() = default;
 
     int getId() const { return idUser; }
     string getLogin() const { return login; }
