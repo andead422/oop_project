@@ -10,7 +10,7 @@ class FilmAdmin: public Film {
     string picture;
     string overview;
     string director;
-    vector<string> genres;
+    vector<int> genres;
     vector<string> cast;
 public:
     FilmAdmin() = default;
@@ -24,7 +24,7 @@ public:
     string getPicture() const { return picture; }
     string getOverview() const { return overview; }
     string getDirector() const { return director; }
-    vector<string> getGenres() const { return genres; }
+    vector<int> getGenres() const { return genres; }
     vector<string> getCast() const { return cast; }
 
     Film& setTilte(string title) { this->title = title; return *this; }
@@ -33,8 +33,8 @@ public:
     Film& setPicture(string picture) { this->picture = picture; return *this; }
     Film& setOverview(string overview) { this->overview = overview; return *this; }
     Film& setDirector(string director) { this->director = director; return *this; }
-    Film& setGenres(vector<string> genres) { this->genres = genres; return *this; }
-    Film& setGenre(string genre) { addToSet(genres, genre); return *this; }
+    Film& setGenres(vector<int> genres) { this->genres = genres; return *this; }
+    Film& setGenre(int genre) { addToSet(genres, genre); return *this; }
     Film& setCast(vector<string> cast) { this->cast = cast; return *this; }
     Film& setActor(string actor) { addToSet(cast, actor); return *this; }
 
