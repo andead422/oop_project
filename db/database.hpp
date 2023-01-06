@@ -22,11 +22,11 @@ using std::stod;
 
 class DBConnect: public Singleton<DBConnect> { // наслідування від шаблону
 protected:
-    // DBConnect(); // конструктор захищений, аби його неможливо було викликати ззовні класу
+    DBConnect(); // конструктор захищений, аби його неможливо було викликати ззовні класу
 
     MYSQL* conn = NULL;
 public:
-    DBConnect();
+    // DBConnect();
     int getGenresNumber();
     int getRandomFilm();
     const int getFilmsNumber();
@@ -50,6 +50,8 @@ public:
 
     int insertUser(string, int, int, string);
     int insertFilms(int, map<int, double>);
+
+    friend class Singleton;
 
 };
 
