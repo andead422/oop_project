@@ -1,14 +1,13 @@
 #include "film_admin.hpp"
 
 FilmAdmin::FilmAdmin(int idFilm): Film(idFilm) {
-    title = "database info";
-    year = 0;
-    rate = 0;
-    picture = "database info";
-    overview = "database info";
-    director = "database info";
-    genres = {"database info"};
-    cast = {"database info"};
+    title = database->getFilmTitleYear(idFilm);
+    rate = database->getFilmRate(idFilm);
+    picture = "parsed";
+    overview = "parsed";
+    director = database->getFilmDirector(idFilm);
+    genres = database->getFilmGenres(idFilm);
+    cast = database->getFilmCast(idFilm);
 }
 
 //оператор приведення типу до string
