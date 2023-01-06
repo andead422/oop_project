@@ -29,6 +29,8 @@ cur = data_base.cursor()
 # query = QUERY
 cur.execute(QUERY)
 df_film = pd.read_sql(QUERY, data_base)
+cur.close()
+data_base.close()
 df_film['id_film'] = df_film['id_film'].astype(int)
 
 
