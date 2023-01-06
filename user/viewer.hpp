@@ -9,13 +9,14 @@ class Viewer: public User {
     char sex;
     vector<FilmViewer> ratedFilms;
 
-    //vector[genre]<pair<count, 0 rate>>
+    //vector[genre]<pair<count 0.5+ rates, count 0 rates>>
     vector<pair<int, int>> genres = vector(database->getGenresNumber(), pair(0,0));
 
 public:
     Viewer() = default;
-    Viewer(int idUser) { cout << "getting info from db"; }
-    Viewer(int age, char sex): age(age), sex((char)toupper(sex)) {}   
+    Viewer(int idUser): User(idUser) { cout << "getting info from db"; }
+    Viewer(string login): User(login) { cout << "getting info from db"; }
+    Viewer(string login, int age, char sex): User(login), age(age), sex((char)toupper(sex)) {}   
     Viewer(int age, char sex, vector<FilmViewer>& ratedFilms): age(age), sex((char)toupper(sex)), ratedFilms(ratedFilms) {}
     Viewer(const Viewer&) = default;
     ~Viewer() = default;
@@ -41,10 +42,11 @@ public:
     bool checkNumberOfRecommendations() const;
     void rateFilms();
     bool checkSeen(FilmViewer& film) const { return findInVector(ratedFilms, film) != -1; }
-
+    
+    void printInfo() const;
 private:
     void incrementRatedGenres(FilmViewer&, double);
-    void printInfo() const;
+    
 };
 
 #endif

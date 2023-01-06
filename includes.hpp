@@ -28,6 +28,7 @@ using std::to_string;
 using std::toupper;
 using std::istringstream;
 
+//шукає елемент у векторі
 template<typename T>
 int findInVector(const vector<T>& vec, const T& element) {
     for(int ii = 0; ii < vec.size(); ++ii) {
@@ -39,6 +40,7 @@ int findInVector(const vector<T>& vec, const T& element) {
     return -1;
 }
 
+//перевіряє наявність елемента у векторі перед додаванням (вектор відіграє роль множини(set) )
 template<typename T>
 void addToSet(vector<T>& vec, const T& element) {
     if(findInVector(vec, element) != -1) {
@@ -46,8 +48,10 @@ void addToSet(vector<T>& vec, const T& element) {
     }
 }
 
+//база рекурсії
 inline string& to_string(string& str) { return str;}
 
+//перетворює вектор у string розділяючи елементи delim-ом, приймає вектор типу для якого визначена функція to_string(type)
 template<typename T>
 string to_string(const vector<T>& vec, const string& delim = ", ") {
     string output;

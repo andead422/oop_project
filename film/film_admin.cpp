@@ -11,7 +11,7 @@ FilmAdmin::FilmAdmin(int idFilm): Film(idFilm) {
     cast = {"database info"};
 }
 
-
+//оператор приведення типу до string
 FilmAdmin::operator string() const {
     string output;
     output += title + " (" + to_string(year) + ")\n"; 

@@ -33,6 +33,7 @@ public:
     FilmViewer& operator=(const FilmViewer& other);
 };
 
+//потрібно саме таке оголошення для використання класу як аргументу шаблоної функції (includes.h)
 inline string to_string(const FilmViewer& film) { return to_string(film.getId()) + ": " + to_string(film.getFilmRate()); }
 
 #endif

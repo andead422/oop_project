@@ -1,12 +1,10 @@
 #include "viewer.hpp"
-#define LIMIT 1
-
-// //map<genre, pair<count, 0 rate>>
-// vector<pair<int, int>> Viewer::genres(database.getGenresNumber(), {0,0});
+#define LIMIT 1 //потрібна для налаштування кількості фільмів що оцінює viewer
 
 Viewer::operator string() const {
     string output;
-    output += getIdUser() + "\n"; 
+    output += "Login: " + login + "\n"; 
+    output += "ID: " + to_string(getIdUser()) + "\n"; 
     output += "Age: " + to_string(age) + "\n";
     output += "Sex: ";
     (sex == 'M') ? output += "male\n" : output += "female\n";
@@ -17,10 +15,11 @@ Viewer::operator string() const {
 
 
 void Viewer::printInfo() const {
+    cout << "Admin: no" << endl;
     cout << (string) *this;
 }
 
-
+//збільшення відповідних лічильників для всіх жанрів оціненого viewer-ом фільму
 void Viewer::incrementRatedGenres(FilmViewer& film, double rate) {
     for (int ii = 0; ii < film.getFilmGenresSize(); ++ii) {
         if (rate == 0) {
@@ -32,13 +31,13 @@ void Viewer::incrementRatedGenres(FilmViewer& film, double rate) {
     }
 }
 
-
+//встановлює фільму оцінку від юзера
 void Viewer::rateFilm(FilmViewer& film, double rate) {
     incrementRatedGenres(film, rate);
 
     if (rate != 0) {
         film.setFilmRate(rate);
-        ratedFilms.push_back(*new FilmViewer(film));
+        ratedFilms.push_back(*new FilmViewer(film)); //додаємо фільм до списку оцінених юзером
     }
 }
 
@@ -74,6 +73,9 @@ std::istream& operator >> (std::istream& in, Viewer& viewer) {
     while(1) {
         cout << "Enter age and sex(m/f):" << endl;
 
+        cout << "Login: ";
+        in >> viewer.login;        
+
         cout << "Age: ";
         in >> viewer.age;
 
@@ -81,14 +83,14 @@ std::istream& operator >> (std::istream& in, Viewer& viewer) {
         in >> viewer.sex;
         viewer.sex = (char)toupper(viewer.sex);
 
-        if (viewer.sex == 'M' || viewer.sex == 'F') break;
+        if ((viewer.sex == 'M' || viewer.sex == 'F') && viewer.age >= 0) break;
 
         cout << "Invalid input!" << endl << endl;
     }
     return in;
 }
 
-
+//перевірка чи всі жанри заповнено 
 bool Viewer::checkNumberOfRecommendations() const {
     for (int ii = 0; ii < genres.size(); ++ii) {
         if (genres[ii].first < LIMIT && genres[ii].second < LIMIT) {
@@ -99,7 +101,7 @@ bool Viewer::checkNumberOfRecommendations() const {
     return false;
 }
 
-
+//процес надання юзеру фільмів для встановлення оцінок
 void Viewer::rateFilms() {
     cout << "Rate film: " << endl << endl;
     int ii = 0;
@@ -108,16 +110,22 @@ void Viewer::rateFilms() {
         filmViewer.printFilmInfoToRate();
 
         double rate;
-        cout << "Rate from 0 to 5 with step 0.5: ";
-        cin >> rate;
+        do{
+            cout << "Rate from 0 to 5 with step 0.5: ";
+            cin >> rate;
+            if(((rate - (int)rate == 0) || (rate - (int)rate == 0.5)) && rate <= 5 && rate >= 0) break;
+            else {
+                cout << "Invalid input!" << endl;
+            }
+
+        } while(1);
 
         rateFilm(filmViewer, rate);
         cout << to_string(filmViewer) << endl << endl;
     } while(checkNumberOfRecommendations());
-    //} while(++ii < 2);
 }
 
-
+//переведення масиву у зручний для обробки формат: map<id_film, rate>
 map<int, double> Viewer::getMapRatedFilms() const {
     map<int, double> output;
     

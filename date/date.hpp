@@ -13,7 +13,6 @@ public:
     Date();
     Date(int day, int month, int year): day(day), month(month), year(year) {}
     Date(const Date&) = default;
-    //delat proverki?
     ~Date() = default;
 
     int getDay() const { return day; }
