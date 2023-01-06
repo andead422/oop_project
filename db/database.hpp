@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 #include <string>
 #include <mysql/mysql.h>
 
@@ -13,6 +14,7 @@ using std::cout;
 using std::cin;
 using std::endl;
 using std::vector;
+using std::map;
 using std::string;
 using std::to_string;
 using std::stoi;
@@ -31,6 +33,22 @@ public:
     string getFilmDirector(int);
     vector<int> getFilmGenres(int);
     vector<string> getFilmCast(int);
+
+    string getUserLogin(int);
+    char getViewerSex(int);
+    int getViewerAge(int);
+    vector<int> getViewerRatedFilms(int);
+    int checkAdmin(int);
+
+    int getUserId(string);
+    char getViewerSex(string);
+    int getViewerAge(string);
+    vector<int> getViewerRatedFilms(string);
+    int checkAdmin(string);
+
+    int insertUser(string, int, int, string);
+    int insertFilms(int, map<int, double>);
+
 };
 
 
