@@ -101,6 +101,18 @@ vector<string> DBConnect::getFilmCast(int id) { // повертає масив �
     return {};
 }
 
+double DBConnect::getFilmRate(int id) {
+    MYSQL_RES* res;
+    MYSQL_ROW row;
+    mysql_query(conn, ("SELECT avg_rate FROM rating WHERE id_film = " + to_string(id)).c_str());
+    if (res = mysql_store_result(conn)) {
+        row = mysql_fetch_row(res);
+        mysql_free_result(res);
+        return stod(row[0]);
+    }
+    return -1; 
+}
+
 string DBConnect::getUserLogin(int id) { // повертає username по id
     MYSQL_RES* res;
     MYSQL_ROW row;

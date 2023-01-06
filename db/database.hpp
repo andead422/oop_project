@@ -18,6 +18,7 @@ using std::map;
 using std::string;
 using std::to_string;
 using std::stoi;
+using std::stod;
 
 class DBConnect: public Singleton<DBConnect> { // наслідування від шаблону
 protected:
@@ -33,6 +34,7 @@ public:
     string getFilmDirector(int);
     vector<int> getFilmGenres(int);
     vector<string> getFilmCast(int);
+    double getFilmRate(int);
 
     string getUserLogin(int);
     char getViewerSex(int);
