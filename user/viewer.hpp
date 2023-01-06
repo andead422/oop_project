@@ -14,8 +14,8 @@ class Viewer: public User {
 
 public:
     Viewer() = default;
-    Viewer(int idUser): User(idUser) { cout << "getting info from db"; }
-    Viewer(string login): User(login) { cout << "getting info from db"; }
+    Viewer(int);
+    Viewer(string);
     Viewer(string login, int age, char sex): User(login), age(age), sex((char)toupper(sex)) {}   
     Viewer(int age, char sex, vector<FilmViewer>& ratedFilms): age(age), sex((char)toupper(sex)), ratedFilms(ratedFilms) {}
     Viewer(const Viewer&) = default;
@@ -44,6 +44,7 @@ public:
     bool checkSeen(FilmViewer& film) const { return findInVector(ratedFilms, film) != -1; }
     
     void printInfo() const;
+    bool isAdmin() const { return 0; }
 private:
     void incrementRatedGenres(FilmViewer&, double);
     

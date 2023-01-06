@@ -7,18 +7,42 @@ FilmAdmin Administrator::seeFilmStats(int id) const {
 
 //повертає User* адже це може буди як Admin так і Viewer
 User* Administrator::seeUserStats(int id) const {
-    //это с бд забирается и если админ то создаем админа если нет то вивера
-    return new Viewer(id);
+    int admin = database->checkAdmin(id);
+
+    switch (admin) {
+    case 1:
+        return new Administrator(id);
+        break;
+    
+    case 0:
+        return new Viewer(id);
+        break;
+
+    case -1:
+        cout << "There isn`t user with id: " << id << endl;
+        break;
+    }
+    
 }
 
 //повертає User* адже це може буди як Admin так і Viewer
 User* Administrator::seeUserStats(string login) const {
     //это с бд забирается и если админ то создаем админа если нет то вивера
-    return new Viewer(login);
-}
+    int admin = database->checkAdmin(login);
 
-bool Administrator::authorization() const {
-    return true;
+    switch (admin) {
+    case 1:
+        return new Administrator(login);
+        break;
+    
+    case 0:
+        return new Viewer(login);
+        break;
+
+    case -1:
+        cout << "There isn`t user with login: " << login << endl;
+        break;
+    }
 }
 
 void Administrator::printInfo() const {
