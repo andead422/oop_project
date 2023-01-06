@@ -9,7 +9,7 @@ DBConnect* database = DBConnect::getInstance();
 
 void dateInstance();
 void recommendationsInstance();
-void userCreation(User*);
+User* userCreation();
 void viewerCase(Viewer*);
 void adminCase(Administrator*);
 
@@ -97,7 +97,7 @@ void dateInstance() {
 
 void recommendationsInstance() {
     User* user;
-    userCreation(user);
+    user = userCreation();
     
     if (user->isAdmin()) {
         adminCase(reinterpret_cast<Administrator*>(user));
@@ -107,12 +107,14 @@ void recommendationsInstance() {
     }
 }
 
-void userCreation(User* user) {
+User* userCreation() {
+    User* user;
+
     cout << "Create new user:" << endl;
     string login;
     cin >> login;
 
-    int admin = checkAdmin(login);
+    int admin = database->checkAdmin(login);
     switch (admin){
     case 1:
         user = new Administrator(login);
@@ -149,6 +151,7 @@ void userCreation(User* user) {
 
     cout << endl << "Created user: " << endl;
     user->printInfo();
+    return user;
 }
 
 void viewerCase(Viewer* viewer) {

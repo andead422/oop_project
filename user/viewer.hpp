@@ -44,7 +44,7 @@ public:
     bool checkSeen(FilmViewer& film) const { return findInVector(ratedFilms, film) != -1; }
     
     void printInfo() const;
-    bool isAdmin() const { return 0; }
+    bool isAdmin() const  { return 0; }
 private:
     void incrementRatedGenres(FilmViewer&, double);
     
