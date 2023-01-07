@@ -36,7 +36,7 @@ public:
 
     //простіше порівнюівати кількості днів
     bool operator > (const Date& another) const { return numDays() > another.numDays(); }
-    bool operator < (const Date& another) const { return !(*this > another); }
+    bool operator < (const Date& another) const { return !(*this > another || *this == another); }
 
     friend std::istream& operator >> (std::istream&, Date&);
     friend std::ostream& operator << (std::ostream&, const Date&);

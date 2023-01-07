@@ -92,6 +92,7 @@ void dateInstance() {
 
     cout << "date2 + date0: ";
     (date2 + date0).printDate();
+    (date2 + date0 + date1).printDate();
     cout << endl;
 }
 
