@@ -36,12 +36,7 @@ void Viewer::printInfo() const {
 //збільшення відповідних лічильників для всіх жанрів оціненого viewer-ом фільму
 void Viewer::incrementRatedGenres(FilmViewer& film, double rate) {
     for (int ii = 0; ii < film.getFilmGenresSize(); ++ii) {
-        if (rate == 0) {
-            genres[film.getFilmGenre(ii) - 1].second++;
-        }
-        else {
-            genres[film.getFilmGenre(ii) - 1].first++;
-        }
+        genres[film.getFilmGenre(ii) - 1]++;
     }
 }
 
@@ -56,25 +51,25 @@ void Viewer::rateFilm(FilmViewer& film, double rate) {
 }
 
 
-FilmViewer Viewer::generateNewFilm() {
-    int idFilm;
+// FilmViewer Viewer::generateNewFilm() {
+//     int idFilm;
 
-    while(1) {
-        FilmViewer temp(database->getRandomFilm());
-        if(checkGenres(temp)) return temp;
-    }
-}
+//     while(1) {
+//         FilmViewer temp(database->getRandomFilm());
+//         if(checkGenres(temp)) return temp;
+//     }
+// }
 
 
-bool Viewer::checkGenres(FilmViewer& film) {
-    for (int ii = 0; ii < film.getFilmGenresSize(); ++ii) {
-        if (genres[film.getFilmGenre(ii) - 1].first < LIMIT && genres[film.getFilmGenre(ii) - 1].second < LIMIT) {
-            return true;
-        }
-    }
+// bool Viewer::checkGenres(FilmViewer& film) {
+//     for (int ii = 0; ii < film.getFilmGenresSize(); ++ii) {
+//         if (genres[film.getFilmGenre(ii) - 1].first < LIMIT && genres[film.getFilmGenre(ii) - 1].second < LIMIT) {
+//             return true;
+//         }
+//     }
 
-    return false;
-}
+//     return false;
+// }
 
 
 std::ostream& operator << (std::ostream& out, const Viewer& viewer) {
@@ -101,39 +96,65 @@ std::istream& operator >> (std::istream& in, Viewer& viewer) {
     return in;
 }
 
-//перевірка чи всі жанри заповнено 
-bool Viewer::checkNumberOfRecommendations() const {
-    for (int ii = 0; ii < genres.size(); ++ii) {
-        if (genres[ii].first < LIMIT && genres[ii].second < LIMIT) {
-            return true;
-        }
-    }
+// //перевірка чи всі жанри заповнено 
+// bool Viewer::checkNumberOfRecommendations() const {
+//     for (int ii = 0; ii < genres.size(); ++ii) {
+//         if (genres[ii].first < LIMIT && genres[ii].second < LIMIT) {
+//             return true;
+//         }
+//     }
 
-    return false;
-}
+//     return false;
+// }
+
+// //процес надання юзеру фільмів для встановлення оцінок
+// void Viewer::rateFilms() {
+//     cout << "Rate film: " << endl << endl;
+//     int ii = 0;
+//     do {
+//         FilmViewer filmViewer = generateNewFilm();
+//         filmViewer.printFilmInfoToRate();
+
+//         double rate;
+//         do{
+//             cout << "Rate from 0 to 5 with step 0.5: ";
+//             cin >> rate;
+//             if(((rate - (int)rate == 0) || (rate - (int)rate == 0.5)) && rate <= 5 && rate >= 0) break;
+//             else {
+//                 cout << "Invalid input!" << endl;
+//             }
+
+//         } while(1);
+
+//         rateFilm(filmViewer, rate);
+//         cout << to_string(filmViewer) << endl << endl;
+//     } while(checkNumberOfRecommendations());
+// }
 
 //процес надання юзеру фільмів для встановлення оцінок
 void Viewer::rateFilms() {
     cout << "Rate film: " << endl << endl;
     int ii = 0;
-    do {
-        FilmViewer filmViewer = generateNewFilm();
-        filmViewer.printFilmInfoToRate();
+    for (int ii = 0; ii < genres.size(); ++ii) {
+        if (genres[ii] == 0) {
+            FilmViewer filmViewer = database->getRandomFilm(ii + 1);
+            filmViewer.printFilmInfoToRate();
 
-        double rate;
-        do{
-            cout << "Rate from 0 to 5 with step 0.5: ";
-            cin >> rate;
-            if(((rate - (int)rate == 0) || (rate - (int)rate == 0.5)) && rate <= 5 && rate >= 0) break;
-            else {
-                cout << "Invalid input!" << endl;
-            }
+            double rate;
+            do{
+                cout << "Rate from 0 to 5 with step 0.5: ";
+                cin >> rate;
+                if(((rate - (int)rate == 0) || (rate - (int)rate == 0.5)) && rate <= 5 && rate >= 0) break;
+                else {
+                    cout << "Invalid input!" << endl;
+                }
 
-        } while(1);
+            } while(1);
 
-        rateFilm(filmViewer, rate);
-        cout << to_string(filmViewer) << endl << endl;
-    } while(checkNumberOfRecommendations());
+            rateFilm(filmViewer, rate);
+            cout << to_string(filmViewer) << endl << endl;
+        }
+    }
 }
 
 //переведення масиву у зручний для обробки формат: map<id_film, rate>

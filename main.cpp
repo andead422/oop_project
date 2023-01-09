@@ -181,31 +181,40 @@ void adminCase(Administrator* admin) {
         cout << "3. See film stats by id:" << endl;
 
         cin >> choose;
-        if(choose < 4 && choose > 0) break;
+        if(choose < 3 && choose > 0) break;
 
         cout << "Invalid input!!" << endl;
     }
 
     string login;
-    int id;
+    int id, FilmNum = database->getFilmsNumber();
+    User* user;
+    
     switch (choose) {
     case 1:
         cout << "Enter an id: ";
         cin >> id;
+        
+        user = admin->seeUserStats(id);
+        if(user) user->printInfo();
 
-        admin->seeUserStats(id)->printInfo();
         break;
-    
+
     case 2:
         cout << "Enter an login: ";
         cin >> login;
+        
+        user = admin->seeUserStats(login);
+        if(user) user->printInfo();
 
-        admin->seeUserStats(login)->printInfo();
         break;
 
     case 3:
-        cout << "Enter an id: ";
-        cin >> id;
+        do {
+            cout << "Number of films: " << FilmNum << endl;
+            cout << "Enter an id: ";
+            cin >> id;
+        } while(id > FilmNum || id <= 0);
 
         admin->seeFilmStats(id).printInfo();
         break;
