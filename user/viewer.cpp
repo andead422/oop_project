@@ -141,7 +141,6 @@ std::istream& operator >> (std::istream& in, Viewer& viewer) {
 //процес надання юзеру фільмів для встановлення оцінок
 void Viewer::rateFilms() {
     cout << "Rate film: " << endl << endl;
-    int ii = 0;
     for (int ii = 0; ii < genres.size(); ++ii) {
         if (genres[ii].first == 0) {
             FilmViewer filmViewer = database->getRandomFilm(ii + 1);
@@ -157,6 +156,8 @@ void Viewer::rateFilms() {
                 }
 
             } while(1);
+
+            if(!rate) --ii;
 
             rateFilm(filmViewer, rate);
             cout << to_string(filmViewer) << endl << endl;
