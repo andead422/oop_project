@@ -1,44 +1,30 @@
 #include "admin.hpp"
 
 //повертає User* адже це може буди як Admin так і Viewer
-User* Administrator::seeUserStats(int id) const {
-    int admin = database->checkAdmin(id);
-
-    switch (admin) {
-    case 1:
-        return new Administrator(id);
-        break;
-    
-    case 0:
-        return new Viewer(id);
-        break;
-
-    case -1:
-        cout << "There isn`t user with id: " << id << endl;
-        break;
-    }
-    
-}
-
-//повертає User* адже це може буди як Admin так і Viewer
-User* Administrator::seeUserStats(string login) const {
+template<typename T>
+User* Administrator::seeUserStats(T biom) const {
     //это с бд забирается и если админ то создаем админа если нет то вивера
-    int admin = database->checkAdmin(login);
+    int admin = database->checkAdmin(biom);
 
     switch (admin) {
     case 1:
-        return new Administrator(login);
+        return new Administrator(biom);
         break;
     
     case 0:
-        return new Viewer(login);
+        return new Viewer(biom);
         break;
 
     case -1:
-        cout << "There isn`t user with login: " << login << endl;
+        cout << "There isn`t user: " << biom << endl;
         break;
     }
+
+    return NULL;
 }
+
+template User* Administrator::seeUserStats<int>(int) const;
+template User* Administrator::seeUserStats<string>(string) const;
 
 void Administrator::printInfo() const {
     cout << "Admin: yes" << endl;

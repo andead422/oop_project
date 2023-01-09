@@ -15,8 +15,10 @@ public:
     ~Administrator() = default;
 
     FilmAdmin seeFilmStats(int id) const { return FilmAdmin(id); }
-    User* seeUserStats(int) const;
-    User* seeUserStats(string) const;
+
+    
+    template<typename T>
+    User* seeUserStats(T) const;
     
     void printInfo() const;
     bool isAdmin() const { return 1; }
