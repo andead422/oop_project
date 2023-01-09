@@ -50,10 +50,10 @@ const int DBConnect::getFilmsNumber() { // повертає кількість �
     return 0;
 }
 
-int DBConnect::getRandomFilm() { // повертає id випадкового фільму
+int DBConnect::getRandomFilm(int genre) { // повертає id випадкового фільму 
     MYSQL_RES* res;
     MYSQL_ROW row;
-    mysql_query(conn, "SELECT id_film FROM film ORDER BY RAND() LIMIT 1");
+    mysql_query(conn, ("SELECT t1.id_film FROM film t1 WHERE t1.id_film IN (SELECT t2.id_film FROM film_genre t2 WHERE id_genre = " + to_string(genre) + ") AND popularity > 25 ORDER BY RAND() LIMIT 1").c_str());
     if (res = mysql_store_result(conn)) {
         row = mysql_fetch_row(res);
         mysql_free_result(res);
@@ -101,7 +101,7 @@ vector<string> DBConnect::getFilmCast(int id) { // повертає масив �
     return {};
 }
 
-double DBConnect::getFilmRate(int id) {
+double DBConnect::getFilmRate(int id) { // повертає середню оцінку фільму
     MYSQL_RES* res;
     MYSQL_ROW row;
     mysql_query(conn, ("SELECT avg_rate FROM rating WHERE id_film = " + to_string(id)).c_str());

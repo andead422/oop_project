@@ -28,8 +28,8 @@ protected:
 public:
     // DBConnect();
     int getGenresNumber();
-    int getRandomFilm();
     const int getFilmsNumber();
+    int getRandomFilm(int);
     string getFilmTitleYear(int);
     string getFilmDirector(int);
     vector<int> getFilmGenres(int);

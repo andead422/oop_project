@@ -11,6 +11,7 @@ FilmViewer& FilmViewer::operator=(const FilmViewer& other) {
 void FilmViewer::printFilmInfoToRate() {
     // parse image;
     cout << database->getFilmTitleYear(idFilm) << endl;
+    cout << to_string(database->getFilmGenres(idFilm)) << endl;
 }
 
 //виводить фільм як рекомендацію
