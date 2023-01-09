@@ -10,7 +10,7 @@ class Viewer: public User {
     vector<FilmViewer> ratedFilms;
 
     //vector[genre]<pair<count 0.5+ rates, count 0 rates>>
-    vector<int> genres = vector(database->getGenresNumber(), 0);
+    vector<pair<int, int>> genres = vector(database->getGenresNumber(), pair(0,0));
 
 public:
     Viewer() = default;
@@ -30,10 +30,10 @@ public:
     Viewer& setSex(char sex) { this->sex = (char)toupper(sex); return *this; }
     Viewer& setRatedFilms(vector<FilmViewer>& ratedFilms) { this->ratedFilms = ratedFilms; return *this; }
     Viewer& setRatedFilm(FilmViewer& ratedFilm) { addToSet(ratedFilms, ratedFilm); return *this; }
-    vector<int> getGenresStats() { return genres; }
+    vector<pair<int, int>> getGenresStats() { return genres; }
 
     void rateFilm(FilmViewer&, double);
-    // FilmViewer generateNewFilm;
+    // FilmViewer generateNewFilm();
     // bool checkGenres(FilmViewer&);
 
     operator string()const;

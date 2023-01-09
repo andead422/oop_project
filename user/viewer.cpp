@@ -36,7 +36,14 @@ void Viewer::printInfo() const {
 //збільшення відповідних лічильників для всіх жанрів оціненого viewer-ом фільму
 void Viewer::incrementRatedGenres(FilmViewer& film, double rate) {
     for (int ii = 0; ii < film.getFilmGenresSize(); ++ii) {
-        genres[film.getFilmGenre(ii) - 1]++;
+        if (rate) {
+            genres[film.getFilmGenre(ii) - 1].first++;
+        }
+        else {
+            if(++genres[film.getFilmGenre(ii) - 1].second >= 3) {
+                genres[film.getFilmGenre(ii) - 1].first++;
+            }
+        }
     }
 }
 
@@ -136,7 +143,7 @@ void Viewer::rateFilms() {
     cout << "Rate film: " << endl << endl;
     int ii = 0;
     for (int ii = 0; ii < genres.size(); ++ii) {
-        if (genres[ii] == 0) {
+        if (genres[ii].first == 0) {
             FilmViewer filmViewer = database->getRandomFilm(ii + 1);
             filmViewer.printFilmInfoToRate();
 
